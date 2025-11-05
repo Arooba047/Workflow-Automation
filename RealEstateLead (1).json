@@ -1,0 +1,489 @@
+{
+  "name": "RealEstateLead",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Home Finder",
+        "formDescription": "We'll find homes for you according to your need.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Location",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Lahore"
+                  },
+                  {
+                    "option": "Islamabad"
+                  },
+                  {
+                    "option": "Karachi"
+                  },
+                  {
+                    "option": "Multan"
+                  },
+                  {
+                    "option": "Faisalabad"
+                  },
+                  {
+                    "option": "Gujranwala"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What's your budget range?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "1 Crore - 3 Crore"
+                  },
+                  {
+                    "option": "3 Crore - 7 Crore"
+                  },
+                  {
+                    "option": "7 Crore - 10 Crore"
+                  },
+                  {
+                    "option": "10 Crore - 15 Crore"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Plot Size",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "3 Marla"
+                  },
+                  {
+                    "option": "5 Marla"
+                  },
+                  {
+                    "option": "7 Marla"
+                  },
+                  {
+                    "option": "10 Marla"
+                  },
+                  {
+                    "option": "1 Kanal"
+                  },
+                  {
+                    "option": "2 Kanal"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "65a4087f-b7bd-42f6-a904-47d4b0d8d741",
+      "name": "On form submission",
+      "webhookId": "ebcdcb58-cd98-4447-906c-40e3684c160e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "58f24857-14c4-4787-8fec-afc9ab4ca34f",
+              "name": "Finder Name",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "12de63e1-e6bd-408d-80a1-cafe44b945b9",
+              "name": "Finder Email",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "33f5698c-210c-4540-a557-6f5f5b28e8be",
+              "name": "Finder Phone Number",
+              "value": "={{ $json['Phone Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "4675afe2-a770-48c9-84a0-d72f4e0b31e2",
+              "name": "Finder Location",
+              "value": "={{ $json.Location }}",
+              "type": "string"
+            },
+            {
+              "id": "20de392a-2f9d-4dcf-9bc9-54fd327ab685",
+              "name": "Finder Budget",
+              "value": "={{ $json['What\\'s your budget range?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "165e1243-0916-4c2d-825b-beccbc88d8f0",
+              "name": "Finder Desired Plot Size",
+              "value": "={{ $json['Plot Size'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e77f7df9-abad-4f77-8c3a-aec249943cdb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://r.jina.ai/https://www.graana.com/sale/?type=residential",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "623df5f7-3bf3-40f3-a3d9-6100fd723ee3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.data }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"title\": \"Property Listings\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"results\": {\n      \"type\": \"array\",\n      \"description\": \"A list of extracted property details.\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"housePrice\": {\n            \"type\": \"string\",\n            \"description\": \"The listed price of the property, including currency symbol if present.\"\n          },\n          \"propertySize\": {\n            \"type\": \"string\",\n            \"description\": \"The size of the property (e.g., 5 Marla, 1 Kanal, 1200 sqft).\"\n          },\n          \"bedrooms\": {\n            \"type\": \"integer\",\n            \"description\": \"The number of bedrooms in the property.\"\n          },\n          \"bathrooms\": {\n            \"type\": \"integer\",\n            \"description\": \"The number of bathrooms in the property.\"\n          },\n          \"fullLocation\": {\n            \"type\": \"string\",\n            \"description\": \"The complete address or location of the property.\"\n          },\n          \"city\": {\n            \"type\": \"string\",\n            \"description\": \"The city where the property is located.\"\n          },\n          \"url\": {\n            \"type\": \"string\",\n            \"format\": \"uri\",\n            \"description\": \"The direct URL of the property listing.\"\n          }\n        },\n        \"required\": [\n          \"housePrice\",\n          \"propertySize\",\n          \"bedrooms\",\n          \"bathrooms\",\n          \"fullLocation\",\n          \"city\",\n          \"url\"\n        ]\n      }\n    }\n  },\n  \"required\": [\"results\"]\n}\n",
+        "options": {
+          "systemPromptTemplate": "=You are an expert data extractor. Analyze the given data and extract detailed information about properties for sale. For each property, provide the following details:\n\n\"address\": Full address of the property.\n\n\"price\": Final sale price of the property.\n\n\"bedrooms\": Number of bedrooms.\n\n\"bathrooms\": Number of bathrooms.\n\n\"size\": Square footage of the property (if available).\n\n\"sale_date\": Date the property was sold.\n\n\"url\": URL of the property listing.\n\n\nAlways output the data in a JSON array called \"results\", with each property represented as an object containing the above keys. You must return all the properties details not just one."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "fd8fa3a7-1f1d-4941-8d22-2485a5823828",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        512,
+        320
+      ],
+      "id": "60e8a245-caa1-4402-8f67-2ae7c4219cfb",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1172d7bd-6436-49f9-a1f2-152a698b1a3c",
+              "leftValue": "={{ $json.city }}",
+              "rightValue": "={{ $('Edit Fields').item.json['Finder Location'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a6fb3182-caf8-4787-9a24-a3c0cd6f5348",
+              "leftValue": "={{ $json.propertySize }}",
+              "rightValue": "={{ $('Edit Fields').item.json['Finder Desired Plot Size'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "a0b4cd36-1ce7-49d8-a497-8dccd851bebf",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        976,
+        0
+      ],
+      "id": "af629f2e-c1fb-4375-afd6-4b1b484ae457",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1408,
+        0
+      ],
+      "id": "4e140140-405f-4587-a36e-244b93eb923b",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=data",
+        "name": "=data for {{ $('Edit Fields').item.json['Finder Name'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1DU_wHCW--zUhJMv5JPZLjxI3Oj-uiuKP",
+          "mode": "list",
+          "cachedResultName": "Projects_Data",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1DU_wHCW--zUhJMv5JPZLjxI3Oj-uiuKP"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1616,
+        0
+      ],
+      "id": "594a8308-137a-47d5-833c-e63feaf42391",
+      "name": "Upload file"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 224,
+        "width": 1920
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "c1b1a061-a331-42d7-8d54-e5daa1b66e0e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 176,
+        "width": 208,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "8e26fb12-81fd-40f9-9af3-356a099dc597",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Real Estate Lead",
+        "height": 96,
+        "width": 320,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "84fe1e63-19c3-4b36-b76e-d88caadbd8f8",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nAsked user to fill out the form, Extract website content using Jina.ai, Use Information Extractor agent to extract content in a structured way then send it to filter to only display user desired properties convert the output properties into a file format.\n\n### Prerequisite\n- Google Gemini Credentials\n- Jina.ai API Key\n- Google Drive Credentials",
+        "height": 240,
+        "width": 1424,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        432,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "5db4c354-660a-458e-8e32-9b1dfdd93861",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "636d701d-ed8f-4c63-9a86-ba2b7e25448d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "Y8qZnps5kD1Li3E0",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
