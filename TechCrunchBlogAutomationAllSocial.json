@@ -1,0 +1,792 @@
+{
+  "name": "TechCrunchBlogAutomationAllSocial",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Title: {{ $json.title }}\nContent: {{ $json.content }}",
+        "options": {
+          "systemMessage": "=##Role\nYou are a highly skilled and experienced content strategist specializing in professional communication and engagement on social platforms.\n\n##Task \nYour primary task is to transform raw input data (a \"Title\" and \"Content\" provided by the user) into a polished, compelling, and highly engaging social media post.\n\n##Output Requirements\n\nFormat: A single, coherent social media post.\n\nLength: Maintain a normal, readable length suitable for LinkedIn,facebook, Instagram and Twitter, typically between 3-7 paragraphs or a concise series of bullet points where appropriate, ensuring it's comprehensive without being overly verbose.\n\nTone: Strictly professional, authoritative, insightful, and inspiring. Avoid overly casual language, jargon where possible without explanation, or salesy rhetoric unless explicitly instructed.\n\nEngagement Strategy:\n\nHook: Start with a strong opening line that immediately grabs attention and highlights the core value or problem addressed.\n\nValue Proposition: Clearly articulate the key takeaways, insights, or benefits for the reader.\n\nCall to Action (Soft/Implicit): Encourage comments, shares, or further discussion without being overly demanding. This could be a thoughtful question at the end or an invitation to share experiences.\n\nHashtags: Include 3-5 relevant, Trendy and high-impact hashtags to increase visibility, carefully selected based on the post's content and target audience (e.g., #IndustryTrends #Leadership #Innovation #ProfessionalDevelopment).\n\nEmojis (Strategic): Use emojis sparingly and professionally to break up text and add visual appeal (e.g., ✨💡📈✅), ensuring they enhance readability and tone, rather than detract from it.\n\n\n##Constraints:\n\nDo not simply copy-paste or slightly reword the original content. A genuine transformation is expected.\n\nDo not include any introductory or concluding remarks from yourself as the AI agent; output only the LinkedIn post content.\n\nExample Input (for your reference, not part of the actual prompt):\n\nTitle: \"New Project Management Software Launch\"\n\nContent: \"Our company launched a new software today. It helps teams manage projects better by tracking tasks, deadlines, and resources. It's supposed to make projects more efficient. We are excited about it.\"\n\nExpected Output Style (example, not actual generation):\n\n🚀 Exciting news from [Your Company Name]! We're thrilled to announce the official launch of our revolutionary new Project Management Suite, designed to transform how teams collaborate and achieve their goals.\n\nIn today's fast-paced environment, efficient project execution is paramount. Our new platform addresses common pain points by offering intuitive features for real-time task tracking, intelligent deadline management, and optimized resource allocation. We believe this isn't just a tool; it's a catalyst for unparalleled team efficiency and successful project delivery.\n\nImagine a world where every team member is perfectly aligned, every task is on schedule, and every resource is utilized to its full potential. That's the vision we're bringing to life.\n\nWhat are your biggest challenges in project management today? Share your thoughts below!\n#ProjectManagement #Innovation #SoftwareLaunch #TeamEfficiency #Productivity"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        16,
+        704
+      ],
+      "id": "9aee7b6c-b607-45e9-a800-b3f8222b4e7e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        448,
+        416
+      ],
+      "id": "f063ae33-80c9-4d94-902e-06ef670e111d",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger",
+        "height": 272,
+        "width": 208,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "42f3e912-4439-4e57-baa5-94e1d88904cc",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Post Fetching",
+        "height": 272,
+        "width": 944,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "50409ed3-10fc-4075-a4f8-d38af19bc5bc",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## AI Generators",
+        "height": 272,
+        "width": 608,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "a0363dc5-3154-44f0-bb6f-fdece52fb2e0",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Post Content:  {{ $json.output }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI agent responsible for generating image generation prompts for LinkedIn posts.  \n\n## Context\n- The image should align with the provided content.  \n- It must look professional, clean, and engaging for a LinkedIn audience.  \n- Visuals should include relevant illustrations, icons, realistic features, logos, well-known people, or symbolic elements instead of cluttered designs.  \n- If the content references a popular company or a well-known individual, the prompt should include the company logo or a recognizable symbolic figure (without distorting branding or likeness).  \n\n## Instructions\n1. Analyze the given content provided during workflow execution.  \n2. Extract the main theme, tone, and key message of the post.  \n3. Detect if the content references a popular company (e.g., Google, Microsoft, Open AI, Lovable, Tesla) or an individual (e.g., Satya Nadella, Elon Musk).  \n4. If a company is mentioned, include its logo or symbolic brand representation in the image prompt.  \n5. If an individual is mentioned, include a professional illustration or symbolic figure related to that person (avoid caricatures).  \n6. Generate a detailed, structured image prompt for an AI image generator.  \n7. Ensure the prompt emphasizes a professional style suitable for LinkedIn.  \n8. Incorporate minimal text (if any) and focus on visuals/illustrations.  \n\n## Tools\n- AI Image Generator (e.g., DALL·E, MidJourney, Stable Diffusion, Flux.1 (Schnell))  \n- Content input provided during workflow execution  \n- Company logo databases or brand references (for symbolic accuracy)  \n\n## Examples\n- Input Topic: \"AI in Healthcare by Microsoft\"  \n  Output Prompt: \"A clean and professional illustration showing doctors collaborating with AI technology in a futuristic hospital. Incorporate Microsoft logo subtly in the background as a glowing element. Blue and white color palette, modern flat design, minimalistic icons representing AI and healthcare.\"  \n\n- Input Topic: \"Remote Work Culture with Google\"  \n  Output Prompt: \"A professional illustration of diverse people working remotely from home, coffee shops, and co-working spaces. Subtle inclusion of Google’s logo in the design (e.g., on a laptop screen). Bright yet minimal colors, clean design, LinkedIn-style aesthetic.\"  \n\n- Input Topic: \"Elon Musk on AI Regulation\"  \n  Output Prompt: \"A professional digital illustration of Elon Musk speaking at a futuristic conference stage, with subtle AI and regulation icons in the background. Neutral blue-gray palette, clean corporate aesthetic suitable for LinkedIn.\"  \n\n## SOP (Standard Operating Procedure)\n1. Receive the LinkedIn post topic and content.  \n2. Identify the key idea or takeaway message.  \n3. Check if the content mentions a popular company or individual.  \n4. If yes, integrate the logo or figure subtly and professionally into the prompt.  \n5. Select a suitable design style (flat design, minimalistic, corporate illustration).  \n6. Write a descriptive and structured image generation prompt.  \n7. Ensure the prompt reflects a LinkedIn-ready aesthetic.  \n\n## Final Notes\n- Avoid busy or overly artistic designs; prioritize clarity and professionalism.  \n- Keep color schemes aligned with LinkedIn’s professional tone (blues, whites, neutral shades).  \n- Ensure logos or figures are integrated respectfully and professionally (not exaggerated).  \n- Do not include excessive text in the generated image.  \n---\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        704
+      ],
+      "id": "e5b31b13-1a9f-418b-a607-1d925f469961",
+      "name": "Image Prompt Generator"
+    },
+    {
+      "parameters": {
+        "content": "## AI Models",
+        "height": 256,
+        "width": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        880
+      ],
+      "typeVersion": 1,
+      "id": "16c04b18-7f28-46ac-9c8e-1f8fe71ec345",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Image Generation",
+        "height": 272,
+        "width": 544,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        576,
+        608
+      ],
+      "typeVersion": 1,
+      "id": "607bd163-5b49-4e01-a0b8-68f9187c2a8f",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg",
+          "mode": "list",
+          "cachedResultName": "TechCrunch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            " Article Title": "={{ $('Condition Phase').item.json.title }}",
+            "Content": "={{ $('AI Agent').item.json.output }}",
+            "Image URL": "={{ $json.webViewLink }}",
+            "Post ID": "={{ $('Condition Phase').item.json.id }}",
+            "Status": "TRUE"
+          },
+          "matchingColumns": [
+            " Article Title"
+          ],
+          "schema": [
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": " Article Title",
+              "displayName": " Article Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Content",
+              "displayName": "Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Image URL",
+              "displayName": "Image URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        976
+      ],
+      "id": "0e68b3a7-c041-4144-9099-4f0d6da57a45",
+      "name": "Update Sheets"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Condition Phase').item.json.title }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1DU_wHCW--zUhJMv5JPZLjxI3Oj-uiuKP",
+          "mode": "list",
+          "cachedResultName": "Projects_Data",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1DU_wHCW--zUhJMv5JPZLjxI3Oj-uiuKP"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        656,
+        976
+      ],
+      "id": "e6d1c109-531f-432d-92db-05aba3bff705",
+      "name": "Upload Media File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs",
+              "value": "={{ $('Image Prompt Generator').item.json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        704
+      ],
+      "id": "18598e9d-2710-4a4b-9483-4d0edd9c461b",
+      "name": "Generate Image"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg",
+          "mode": "list",
+          "cachedResultName": "TechCrunch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VoOnCJKSsabfmlO9WAKy0_FXBCB3xm4DvDsEccKfCwg/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        416
+      ],
+      "id": "10143b4b-412f-413f-b87c-4fcf88bdd8e2",
+      "name": "Read Rows"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Only run on the first incoming item\nif ($itemIndex !== 0) {\n  return [];\n}\n\n// Step 1: Collect all Post IDs from Google Sheet rows\nconst postIds = items.map(item => item.json['Post ID']);\n\n// Step 2: Get the Limit node data (assuming only 1 item there)\nconst limitItem = $items('Limit')[0].json;\nconst limitGuid = limitItem.guid;\n\n// Step 3: Check if the guid already exists in the sheet\nconst guidExists = postIds.includes(limitGuid);\n\n// Step 4: Return only once\nif (guidExists) {\n    // If found → return nothing\n    return [];\n} else {\n    // If not found → return Limit node data once\n    return [\n        {\n            json: {\n                title: limitItem.title,\n                content: limitItem.content,\n                id: limitItem.guid\n            }\n        }\n    ];\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        416
+      ],
+      "id": "dc9d05bf-daa1-41ac-b4a7-c4ad32a25fcf",
+      "name": "Condition Phase"
+    },
+    {
+      "parameters": {
+        "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        416
+      ],
+      "id": "f0187280-12b6-4d2c-8fab-cfd54c0ba1f3",
+      "name": "Fetching Blogs"
+    },
+    {
+      "parameters": {
+        "person": "guijjPS4BE",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        528
+      ],
+      "id": "58555af9-ba90-4ea3-8076-1e64d4bfdb85",
+      "name": "LinkedIn"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        416
+      ],
+      "id": "5310d5f4-9c26-4874-be55-a19543d4ca98",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        992
+      ],
+      "id": "5dd5a182-848d-40d0-b7f8-b8e7e8ddb3c8",
+      "name": "OpenAI Model"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        400,
+        992
+      ],
+      "id": "6d42cc9f-4e4e-4f9f-b1c9-9feced50ee99",
+      "name": "Gemini  Model"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "me",
+        "edge": "photos",
+        "sendBinaryData": true,
+        "binaryPropertyName": "data",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "caption",
+                "value": "={{ $('AI Agent').item.json.output }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        384
+      ],
+      "id": "a98137e9-0558-4a12-983f-969a7d205c32",
+      "name": "Facebook"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "={{ $json.node }}",
+        "edge": "media",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "caption",
+                "value": "={{ $('AI Agent').item.json.output }}"
+              },
+              {
+                "name": "node",
+                "value": "={{ $json.node }}"
+              },
+              {
+                "name": "image_url",
+                "value": "={{ $json.ImageURL }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        688
+      ],
+      "id": "1f8cad0c-94e6-45d0-8353-6aa8192557de",
+      "name": "Post Container"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "={{ $('Edit Fields1').item.json.node }}",
+        "edge": "media_publish",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "image_url",
+                "value": "={{ $('Edit Fields1').item.json.ImageURL }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $('AI Agent').item.json.output }}"
+              },
+              {
+                "name": "creation_id",
+                "value": "={{ $json.id }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        832
+      ],
+      "id": "0d560b08-f4c9-4200-9430-82a7b83c286b",
+      "name": "Instagram"
+    },
+    {
+      "parameters": {
+        "content": "## Posting",
+        "height": 800,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1120,
+        336
+      ],
+      "typeVersion": 1,
+      "id": "18bb6ac1-137c-4de3-9c2b-7426602b3adf",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e6bd878d-835a-4ded-94b4-03bb63472db5",
+              "name": "ImageURL",
+              "value": "=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS17KBPizFZkxJlBlK2APMt1Ll2z3Ey5PsEQQ&s",
+              "type": "string"
+            },
+            {
+              "id": "d31e4353-e566-4d59-9166-c4efdf12a63e",
+              "name": "node",
+              "value": "17841476822305625",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        688
+      ],
+      "id": "00f3fcad-f34a-4f6d-9b9c-ce2f7bd4e1f1",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "## File Uploading",
+        "height": 256,
+        "width": 544,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        576,
+        880
+      ],
+      "typeVersion": 1,
+      "id": "8c4c2d34-e014-4543-a310-4bb45a7bc6c8",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        976
+      ],
+      "id": "f48edc77-0646-4c23-a8eb-c77bf570e4a0",
+      "name": "Create Tweet"
+    },
+    {
+      "parameters": {
+        "content": "# Social Media Post Automation",
+        "height": 80,
+        "width": 528,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "44261c67-8b27-4e09-843d-78ca71d356fe",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nFor that I used RS read to fetch latest AI related post from TechCrunch. Add a conditional phase to check if the fetched post already posted or not. Then An AI Agent will summariz and rephrase that post and send it to another AI Agent which will generate image for that post. After generating that image. Image oging to be post on multiple social media platform like Linkedin, Facebook, Istagram and Twitter (X).\n\n### Prerequisite\n- RSS Acount\n- Google Sheet Credentials\n- Open Ai Credentials\n- Gemini Credentials\n- Hugging Face Credentials \n- Meta Developer account and Credentials.\n- Linkedin Developer Account and Credentials.\n- X developer account and Credentials.\n- Google Drive Credentials ",
+        "height": 384,
+        "width": 928
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "ebee6339-c901-4f35-ba7f-c6e62b986509",
+      "name": "Sticky Note8"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Read Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "Generate Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Media File": {
+      "main": [
+        [
+          {
+            "node": "Update Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create Tweet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload Media File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Rows": {
+      "main": [
+        [
+          {
+            "node": "Condition Phase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Condition Phase": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetching Blogs": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn": {
+      "main": [
+        []
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Fetching Blogs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini  Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Container": {
+      "main": [
+        [
+          {
+            "node": "Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Post Container",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "507b08b4-885a-4be4-9190-0f895f75ccfd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "4oi3bBWgLGutj34y",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
