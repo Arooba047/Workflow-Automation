@@ -1,0 +1,936 @@
+{
+  "name": "SalesChannel - LeadGeneration Google Maps",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Generation",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Campaign Type",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "New"
+                  },
+                  {
+                    "option": "Previous"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Campaign Name / Identifier",
+              "placeholder": "Enter a unique name for this search batch (e.g. Business_Owners_NewYork_Run1)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Business Type",
+              "placeholder": "Enter the primary keyword or the Business Type(e.g. Software Companies)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Location",
+              "placeholder": "Enter your search batch Location (e.g. New York)",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Number of Profiles to Find",
+              "fieldType": "number",
+              "placeholder": "Enter the Number of Profiles you want to search (e.g. 10)",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -48,
+        16
+      ],
+      "id": "fc5c515d-0976-4f72-9a92-71a2e748e46c",
+      "name": "On form submission",
+      "webhookId": "a81eda47-25db-445f-880b-1dc3c4e4bd3a"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        400,
+        256
+      ],
+      "id": "fbba48a8-5f12-47e2-97ae-ad44a998d829",
+      "name": "Get Existing Rows From Sheets"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4dd4a2f8-8e95-4e36-91e8-c688293318e9",
+              "name": "Business Type",
+              "value": "={{ $json['Business Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "25c92a12-631d-4f88-844a-2e6356a3450f",
+              "name": "Location",
+              "value": "={{ $('On form submission').item.json.Location }}",
+              "type": "string"
+            },
+            {
+              "id": "46d4d129-cf6f-4246-a920-41b3aa7b28eb",
+              "name": "Number Of Leads",
+              "value": "={{ $('On form submission').item.json['Number of Profiles to Find'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        -192
+      ],
+      "id": "97bc4cf0-c45f-41e2-b19e-61015f070ac9",
+      "name": "Set Fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json.title }}",
+            "Address": "={{ $json.address }}",
+            "City / State": "={{ $json.city }}, {{ $json.state }}",
+            "Phone Number": "='{{ $json.phone }}",
+            "Website": "={{ $json.website }}",
+            "Email": "={{ $json.emails[0] }}",
+            "Linkedin Profile": "={{ $json.linkedIns[0] }}",
+            "CampaignName": "={{ $('On form submission').item.json['Campaign Name / Identifier'] }}",
+            "Instagram Profile": "={{ $json.instagrams[0] }}",
+            "Facebook Profile": "={{ $json.facebooks[0] }}"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "CampaignName",
+              "displayName": "CampaignName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City / State",
+              "displayName": "City / State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Linkedin Profile",
+              "displayName": "Linkedin Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Facebook Profile",
+              "displayName": "Facebook Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Instagram Profile",
+              "displayName": "Instagram Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1984,
+        -192
+      ],
+      "id": "b850e839-2fdb-48cd-938e-289c0d4a7f2e",
+      "name": "Append Generated Leads"
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        848,
+        112
+      ],
+      "id": "22c64afa-e873-4c58-b720-be146a996034",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b2e345b4-ed88-4863-bae5-98907409d5bd",
+              "leftValue": "={{ $json['Campaign Type'] }}",
+              "rightValue": "New",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        16
+      ],
+      "id": "18066c0b-3194-4564-b868-f05bd983efae",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "24585237-2260-462b-bd40-cdbb0975c0ca",
+              "leftValue": "={{ $('On form submission').item.json['Campaign Name / Identifier'] }}",
+              "rightValue": "={{ $json.CampaignName }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        256
+      ],
+      "id": "5297cf38-518c-445e-9132-7ce8a16b8943",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Campaign Not Found"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        832,
+        432
+      ],
+      "id": "b414f14a-937c-48c3-8766-2d0695f82bc0",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4dd4a2f8-8e95-4e36-91e8-c688293318e9",
+              "name": "Business Type",
+              "value": "={{ $('On form submission').item.json['Business Type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "25c92a12-631d-4f88-844a-2e6356a3450f",
+              "name": "Location",
+              "value": "={{ $('On form submission').item.json.Location }}",
+              "type": "string"
+            },
+            {
+              "id": "46d4d129-cf6f-4246-a920-41b3aa7b28eb",
+              "name": "Number Of Leads",
+              "value": "={{ $('On form submission').item.json['Number of Profiles to Find'] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1072,
+        112
+      ],
+      "id": "4207e174-1acd-4176-8024-256e58faddd6",
+      "name": "Set Fields1"
+    },
+    {
+      "parameters": {
+        "content": "# Lead Generation",
+        "height": 1024,
+        "width": 2496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -256,
+        -400
+      ],
+      "typeVersion": 1,
+      "id": "0930662f-0e0d-4d1e-b1e3-baa4e65c94f0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## New Campaign",
+        "height": 304,
+        "width": 1872,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        304,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "9a528693-8c1c-4f93-aff6-7df1761d0489",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Form Submitted",
+        "height": 304,
+        "width": 416,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "b553bc82-c62c-4095-a161-7fc48b7783dd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n## Previous Campaign",
+        "height": 512,
+        "width": 1872,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        304,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "4c14c14e-4576-4cd5-9967-48fafea9eb79",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/lukaskrivka~google-maps-with-contact-details/run-sync-get-dataset-items?token={{ApifyApiToken}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"language\": \"en\",\n    \"locationQuery\": \"{{ $('On form submission').item.json.Location }}\",\n    \"maxCrawledPlacesPerSearch\": {{ $json['Number Of Leads'] }},\n    \"searchStringsArray\": [\n        \"{{ $json['Business Type'] }}\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        -192
+      ],
+      "id": "ed347d72-6c82-4ae4-9f11-73bd21e36aee",
+      "name": "Apify Google Maps"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "768b74fd-4109-43eb-96e4-24eb2d67a92c",
+              "leftValue": "={{ $json.emails.toString() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "886ef00b-369f-4bea-a24f-1886065c59c2",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        -192
+      ],
+      "id": "7ebd9d36-72be-4e6f-8a25-595a4e74af70",
+      "name": "FIltering Emails & Phone No"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/lukaskrivka~google-maps-with-contact-details/run-sync-get-dataset-items?token={{ApifyApiToken}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"language\": \"en\",\n    \"locationQuery\": \"{{ $('On form submission').item.json.Location }}\",\n    \"maxCrawledPlacesPerSearch\": {{ $json['Number Of Leads'] }},\n    \"searchStringsArray\": [\n        \"{{ $json['Business Type'] }}\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1296,
+        112
+      ],
+      "id": "d350dd12-ca45-4941-88ca-b57a3c64045d",
+      "name": "Apify Google Maps1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "81082fe8-9e64-415c-8fc8-714f0b044fe5",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "={{ $('Get Existing Rows From Sheets').item.json['Company Name'] }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1520,
+        112
+      ],
+      "id": "5d40f189-6fbb-491a-8076-1a1237852ea9",
+      "name": "Filtering Duplicates"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "768b74fd-4109-43eb-96e4-24eb2d67a92c",
+              "leftValue": "={{ $json.emails.toString() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "886ef00b-369f-4bea-a24f-1886065c59c2",
+              "leftValue": "={{ $json.phone }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        112
+      ],
+      "id": "171877f4-0bf1-4b5d-927c-91cbac1e5460",
+      "name": "FIltering Emails & Phone No1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json.title }}",
+            "Address": "={{ $json.address }}",
+            "City / State": "={{ $json.city }}, {{ $json.state }}",
+            "Phone Number": "='{{ $json.phone }}",
+            "Website": "={{ $json.website }}",
+            "Email": "={{ $json.emails[0] }}",
+            "Linkedin Profile": "={{ $json.linkedIns[0] }}",
+            "CampaignName": "={{ $('On form submission').item.json['Campaign Name / Identifier'] }}",
+            "Instagram Profile": "={{ $json.instagrams[0] }}",
+            "Facebook Profile": "={{ $json.facebooks[0] }}"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "CampaignName",
+              "displayName": "CampaignName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City / State",
+              "displayName": "City / State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Linkedin Profile",
+              "displayName": "Linkedin Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Facebook Profile",
+              "displayName": "Facebook Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Instagram Profile",
+              "displayName": "Instagram Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1984,
+        112
+      ],
+      "id": "df40810f-efbb-4a22-a64a-834064d48ae2",
+      "name": "Append Generated Leads1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Rows From Sheets": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Fields": {
+      "main": [
+        [
+          {
+            "node": "Apify Google Maps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Generated Leads": {
+      "main": [
+        []
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Set Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Set Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Existing Rows From Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Fields1": {
+      "main": [
+        [
+          {
+            "node": "Apify Google Maps1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify Google Maps": {
+      "main": [
+        [
+          {
+            "node": "FIltering Emails & Phone No",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIltering Emails & Phone No": {
+      "main": [
+        [
+          {
+            "node": "Append Generated Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify Google Maps1": {
+      "main": [
+        [
+          {
+            "node": "Filtering Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtering Duplicates": {
+      "main": [
+        [
+          {
+            "node": "FIltering Emails & Phone No1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FIltering Emails & Phone No1": {
+      "main": [
+        [
+          {
+            "node": "Append Generated Leads1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Generated Leads1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "d71afd73-ee63-4bbe-9904-7cf71dc46b9f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "ld91JR589qQCzDIa",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
