@@ -1,0 +1,1145 @@
+{
+  "name": "Sales Channel - Lead Enrichment",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -272
+      ],
+      "id": "9f96e113-b793-4c4e-80c5-0ad1b4c9099d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -272
+      ],
+      "id": "6bd4380d-682c-4aee-927c-2a48467c07c8",
+      "name": "Get row(s) in sheet"
+    },
+    {
+      "parameters": {
+        "url": "http://apilayer.net/api/validate",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "access_key",
+              "value": "AccessKeyValue"
+            },
+            {
+              "name": "number",
+              "value": "={{ $json['Phone Number'] }}"
+            },
+            {
+              "name": "format",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        896,
+        -336
+      ],
+      "id": "55eb8aa9-0fd8-4051-a4de-89c611cbbef1",
+      "name": "NumVerify"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        -272
+      ],
+      "id": "64174538-1adf-4352-b32c-dbbf5fc9eca0",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "35e6ef78-38d4-4294-870f-63c9d14750bf",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        -272
+      ],
+      "id": "0740c1e3-26d0-4963-a5fb-6f7ccb9aef8e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a0d27a10-4192-49e0-bda6-5939e389fc19",
+              "name": "Row Number",
+              "value": "={{ $json.row_number }}",
+              "type": "string"
+            },
+            {
+              "id": "25ed06ec-901c-40a4-9a09-0c52b73799d0",
+              "name": "Phone Number",
+              "value": "={{ $json['Phone Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6bf5b735-b09a-4f74-88ef-93bc14a8f7e2",
+              "name": "Company Name",
+              "value": "={{ $json['Company Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "d3cacf2a-6775-4dd3-b111-6d2c1df2763a",
+              "name": "EMail",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        -336
+      ],
+      "id": "8428f3f6-d8ac-43eb-ac99-1ac2f764f858",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -336
+      ],
+      "id": "7ca1f5f2-31a3-41c4-af29-7a6b821b24f0",
+      "name": "Wait",
+      "webhookId": "b9a85c9c-25fb-40ee-bf8e-8dd97b49175e"
+    },
+    {
+      "parameters": {
+        "content": "# Phone Number Validation",
+        "height": 544,
+        "width": 1968,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -152,
+        -456
+      ],
+      "typeVersion": 1,
+      "id": "c8446497-0eb6-48ee-89d3-d9189b9cf7d3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cf6ee079-71bd-48f5-8e7b-7077053d4b60",
+              "leftValue": "={{ $json.data.score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1328,
+        -896
+      ],
+      "id": "b6a9ddd1-9e16-408d-99ff-67244c3ddd9c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.mails.so/v1/validate",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.Email }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-mails-api-key",
+              "value": "APIKeyValue"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        -944
+      ],
+      "id": "6a8c25d7-4e72-4e3f-922f-9c7fca995894",
+      "name": "MailBoxLayer"
+    },
+    {
+      "parameters": {
+        "content": "# Email Validation",
+        "height": 528,
+        "width": 1952
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -1040
+      ],
+      "typeVersion": 1,
+      "id": "5b0f3ce4-9fd7-4a4a-aa4f-f966b765e607",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $('Edit Fields').item.json['Company Name'] }}",
+            "Phone Number Status": "Valid"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "CampaignName",
+              "displayName": "CampaignName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number Status",
+              "displayName": "Phone Number Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "City / State",
+              "displayName": "City / State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Linkedin Profile",
+              "displayName": "Linkedin Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Facebook Profile",
+              "displayName": "Facebook Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Instagram Profile",
+              "displayName": "Instagram Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1568,
+        -192
+      ],
+      "id": "64e9f1a4-9a49-443c-96ac-c139976b5192",
+      "name": "Append or update row in sheet"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a0d27a10-4192-49e0-bda6-5939e389fc19",
+              "name": "Row Number",
+              "value": "={{ $('Get row(s) in sheet').item.json.row_number }}",
+              "type": "string"
+            },
+            {
+              "id": "25ed06ec-901c-40a4-9a09-0c52b73799d0",
+              "name": "Phone Number",
+              "value": "={{ $('Get row(s) in sheet').item.json['Phone Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6bf5b735-b09a-4f74-88ef-93bc14a8f7e2",
+              "name": "Company Name",
+              "value": "={{ $json['Company Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1ed2e912-ba46-4b2c-b232-53e8b46498e2",
+              "name": "Email",
+              "value": "={{ $('Get row(s) in sheet').item.json.Email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        -800
+      ],
+      "id": "43c83487-102e-4f57-ae25-0944ccff242c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        -944
+      ],
+      "id": "a0deea04-927c-4f90-8281-79111a0e4cf1",
+      "name": "Wait1",
+      "webhookId": "b9a85c9c-25fb-40ee-bf8e-8dd97b49175e"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $('Edit Fields2').item.json['Company Name'] }}",
+            "Email Status": "Valid"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "CampaignName",
+              "displayName": "CampaignName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number Status",
+              "displayName": "Phone Number Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "City / State",
+              "displayName": "City / State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Linkedin Profile",
+              "displayName": "Linkedin Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Facebook Profile",
+              "displayName": "Facebook Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Instagram Profile",
+              "displayName": "Instagram Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1552,
+        -832
+      ],
+      "id": "fbfe96ad-ae8e-4e65-9f59-8389c1f0d748",
+      "name": "Append or update row in sheet1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        656,
+        -800
+      ],
+      "id": "e2b93f9a-d2e6-4ed6-8726-6392270217dd",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -1264
+      ],
+      "id": "84173303-0051-4c61-adbb-67dd76823b0d",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1043018272,
+          "mode": "list",
+          "cachedResultName": "Google Maps Leads Generation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=1043018272"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        -1264
+      ],
+      "id": "d5557360-4d4f-4927-8c31-7752385d2e2b",
+      "name": "Get row(s) in sheet1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "176f1365-856d-4713-a6bc-3e8fed26b17c",
+              "leftValue": "={{ $json['Email Status'] }}",
+              "rightValue": "Valid",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "79e2d1eb-5512-4d88-bca5-0b2b11f7248a",
+              "leftValue": "={{ $json['Phone Number Status'] }}",
+              "rightValue": "Valid",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "29d7fcfa-bd36-4810-99ba-a2c6c8ad6345",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        -1264
+      ],
+      "id": "9f72a75c-a4c8-49fe-8f00-e806a43b7efe",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk",
+          "mode": "list",
+          "cachedResultName": "SalesChannel",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 597488862,
+          "mode": "list",
+          "cachedResultName": "Validated Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1tlTjHScL3uEJZr5x3Q-sB3ziU2dspAHMRSLbZYXGsVk/edit#gid=597488862"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company Name": "={{ $json['Company Name'] }}",
+            "CampaignName": "={{ $json.CampaignName }}",
+            "Email": "={{ $json.Email }}",
+            "Phone Number": "='{{ $json['Phone Number'] }}",
+            "Address": "={{ $json.Address }}",
+            "City / State": "={{ $json['City / State'] }}",
+            "Linkedin Profile": "={{ $json['Linkedin Profile'] }}",
+            "Facebook Profile": "={{ $json['Facebook Profile'] }}",
+            "Instagram Profile": "={{ $json['Instagram Profile'] }}",
+            "Website": "={{ $json.Website }}"
+          },
+          "matchingColumns": [
+            "Company Name"
+          ],
+          "schema": [
+            {
+              "id": "CampaignName",
+              "displayName": "CampaignName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City / State",
+              "displayName": "City / State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Linkedin Profile",
+              "displayName": "Linkedin Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Facebook Profile",
+              "displayName": "Facebook Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Instagram Profile",
+              "displayName": "Instagram Profile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        -1264
+      ],
+      "id": "5ae3c528-85f3-498d-9b30-5609ef1d10a5",
+      "name": "Append or update row in sheet2"
+    },
+    {
+      "parameters": {
+        "content": "# Validated Leads",
+        "height": 352,
+        "width": 1952,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -1440
+      ],
+      "typeVersion": 1,
+      "id": "9d236763-a7da-414d-896d-849fb5e398d4",
+      "name": "Sticky Note2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NumVerify": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "NumVerify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MailBoxLayer": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MailBoxLayer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f3ce7a35-aca3-4ba1-9106-4f315d347870",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "6RDAINjd35iNscG6",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
