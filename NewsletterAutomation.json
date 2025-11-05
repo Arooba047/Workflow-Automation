@@ -1,0 +1,525 @@
+{
+  "name": "NewsletterAutomation",
+  "nodes": [
+    {
+      "parameters": {
+        "query": "AI Adoption for small businesses",
+        "options": {
+          "topic": "news",
+          "max_results": 3,
+          "time_range": "week"
+        }
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavily",
+      "typeVersion": 1,
+      "position": [
+        176,
+        64
+      ],
+      "id": "3ca533f6-c54d-4631-bf57-d4868b0a2a83",
+      "name": "Initial Research"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        272
+      ],
+      "id": "70bc6fb8-002a-4b9f-914d-9b2c407bb086",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"title\", \"topics\"],\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\",\n      \"description\": \"A short, descriptive title\"\n    },\n    \"topics\": {\n      \"type\": \"array\",\n      \"description\": \"An array of exactly three topics\",\n      \"minItems\": 3,\n      \"maxItems\": 3,\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  },\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        272
+      ],
+      "id": "c81ba7c9-a790-45f1-857c-1e0b0801a111",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.results.map(item => JSON.stringify(item, null, 2)).join('\\n\\n') }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Overview\nYou are an expert newsletter planner. You will receive three articles from the past week. Your job is to come up with a creative and fun title as well as the main topics for this newsletter. \n\n## Instructions\nThe newsletter should flow nicely, feel informative, and holistic. The topics should be 3-5 words. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        384,
+        48
+      ],
+      "id": "a26e61bf-685a-44f2-9872-ac809c8bae9e",
+      "name": "Planning Agent"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.topics",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        656,
+        48
+      ],
+      "id": "9abdaecb-c8fb-4f74-92f1-34f678b89b51",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "query": "={{ $json['output.topics'] }}",
+        "options": {
+          "time_range": "month",
+          "include_raw_content": true
+        }
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavily",
+      "typeVersion": 1,
+      "position": [
+        832,
+        48
+      ],
+      "id": "c595237c-b704-4136-aced-98eb96312671",
+      "name": "Research Topics"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Topic: {{ $json.query }}\n\nResearch:\n{{ $json.results.map(item => JSON.stringify(item, null, 2)).join('\\n\\n') }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are a professional newsletter section writer. Your only task is to write one standalone section of a newsletter.\n\n## Instructions\n- Always include a clear section heading followed by the section content.\n- Do not write an overall title, introduction, or conclusion.\n- Write in a professional, expert, and engaging tone suitable for a business newsletter.\n- If you reference facts, data, or quotes, you must cite your sources and provide the actual clickable URLs.\n- Do not invent citations—only include real, verifiable sources.\n- Keep the section concise, well-structured, and easy to read.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        48
+      ],
+      "id": "1712b630-1d6c-4074-95ad-dac3db49c5f9",
+      "name": "Section Writer Agent"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        48
+      ],
+      "id": "ae6f55ab-1b8b-4b4d-9302-df9d9aa83932",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Title: {{ $('Planning Agent').item.json.output.title }}\n\nSections: {{ $json.output.join(\"\\n\\n\\n\") }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Overview\nYou are an expert newsletter editor. Merge exactly three provided sections into a cohesive, email-ready HTML body with a holistic introduction and conclusion. Maintain a professional, concise tone for a business audience and preserve intended meaning.\n\n## Goals\n- Refine clarity, flow, and consistency across all sections.\n- Keep total content output ≤ 1000 words (hard limit). Avoid fluff.\n\n## Structure (HTML only)\n1) <p> Introduction that frames the three topics and their relevance; reference today’s date: {{ $now.format('yyyy-MM-dd') }}.\n2) For each provided section:\n   - <h2> Use or lightly adjust the given title.\n   - Edited <p> content.\n   - Inline, clickable citations near related claims using <a href=\"https://...\">Source</a>. Never invent sources.\n3) <h3>Sources</h3><ul> A single consolidated list:\n   - Each item: <li><a href=\"[URL]\">[Publication Name] – [Article Title]</a></li>\n   - Include full URLs, deduplicate identical links, and alphabetize by Publication Name.\n4) <p> Conclusion tying threads together with implications or next steps.\n\n## Citation and Link Rules\n- Every factual claim relying on external information must include a real, verifiable, clickable URL.\n- Preserve any provided citations; standardize to the <a> format.\n- Omit unverifiable links rather than fabricate.\n- Use only basic HTML tags (<h2>, <h3>, <p>, <ul>, <li>, <a>). No images, scripts, styles, or external CSS.\n\n## Input\n- You will receive three sections. Edit and integrate them without adding unrelated topics.\n\nOutput Format (return only this)\nSubject: One clear, specific subject line (≤ 80 characters)\n\nContent:\n[HTML body only as specified above]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        48
+      ],
+      "id": "f7942b32-d598-44f0-ad43-da55c455ff27",
+      "name": "Editor Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        272
+      ],
+      "id": "d37311b2-40c0-4717-80da-cc0bbdbe6b99",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"subject\": {\n      \"type\": \"string\",\n      \"description\": \"the email subject\"\n    },\n    \"content\": {\n      \"type\": \"string\",\n      \"description\": \"the newsletter content\"\n    }\n  },\n  \"required\": [\"subject\", \"content\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        272
+      ],
+      "id": "d0778f75-084d-4106-84e5-0126ca5108c7",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.output.content }}",
+        "options": {
+          "sendTo": "aroobaiqbal118@gmail.com"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1792,
+        48
+      ],
+      "id": "9d5b0318-d473-49a8-b402-e0463d3a5505",
+      "name": "Create a draft",
+      "webhookId": "144d7887-2860-402b-b488-c2ad6334b04e"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        64
+      ],
+      "id": "ff95c476-7d18-4367-bcb5-b86a83656ff4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger\n### Set it a Week",
+        "height": 224,
+        "width": 208,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "482d8133-e925-4512-937b-a0f06eea1221",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Set your newsletter topic in the \"query\" field",
+        "height": 224,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -16
+      ],
+      "id": "7a4dc55a-0e11-4b77-a5ee-8f7d73414eb2",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Generating Title & Topics",
+        "height": 224,
+        "width": 480,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        336,
+        -16
+      ],
+      "id": "b40209f1-9dd4-4ec8-9f7c-1f54c62ff562",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Writing Newsletter Sections",
+        "height": 224,
+        "width": 464,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -16
+      ],
+      "id": "61a0b1ad-1002-4af6-94eb-0dd11eea10a9",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Editing Final Copy",
+        "height": 224,
+        "width": 464,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        -16
+      ],
+      "id": "d632c0c5-959f-4c91-a155-498605bb9a79",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Send Draft",
+        "height": 224,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -16
+      ],
+      "id": "98130d6e-9ba0-4f3e-b785-fc0e3f88dc0b",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 224,
+        "width": 704,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        192
+      ],
+      "id": "f5dc5263-c85c-4948-b411-afea56d3c9b7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# News Letter Automation ",
+        "height": 80,
+        "width": 432,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "57d20169-a084-4ccc-b413-d4021d430f00",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nFetched the articles from Tavily. Then an AI agent will generate the article titles and topics. Tavily search content on those topics and our Second AI Agent will write content for the related topic then out final agent prepare the content in an email structure and send it as an email.\n\n### Prerequisite\n- Tavily Account and Credentials\n- Open Ai Credentials\n- Gemini Credentials\n- Gmail Credentials",
+        "height": 240,
+        "width": 1088
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        736,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "e4acb3e3-13dc-4172-9736-c448961f27af",
+      "name": "Sticky Note8"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Initial Research": {
+      "main": [
+        [
+          {
+            "node": "Planning Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Planning Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Section Writer Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Planning Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Planning Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Research Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Topics": {
+      "main": [
+        [
+          {
+            "node": "Section Writer Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Section Writer Agent": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Editor Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Editor Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Editor Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editor Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Initial Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "c0cc701a-bde9-4e99-818b-cb5ba77e215b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "IkGj0E87qSxlr9jM",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
