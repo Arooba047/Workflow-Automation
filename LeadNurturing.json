@@ -1,0 +1,553 @@
+{
+  "name": "LeadNurturing",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Interested Working With Us",
+        "formDescription": "Fill out the details, We'll get back to you soon.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email Adress",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone Number"
+            },
+            {
+              "fieldLabel": "Services Interested In",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Budget Range",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Preferred Contact Time",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Project Timeline",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Additional Comments",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        192
+      ],
+      "id": "aef353d7-8e45-4f7a-994b-7bc8d61a3aca",
+      "name": "On form submission",
+      "webhookId": "c1c0a7a1-4dba-4e46-99d7-58e96e0ea7c0"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4",
+          "mode": "list",
+          "cachedResultName": "Lead Nurturing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Email Adress": "={{ $json['Email Adress'] }}",
+            "Phone Number": "={{ $json['Phone Number'] }}",
+            "Services Interested In": "={{ $json['Services Interested In'] }}",
+            "Budget Range": "={{ $json['Budget Range'] }}",
+            "Project Timeline": "={{ $json['Project Timeline'] }}",
+            "Preferred Contact Time": "={{ $json['Preferred Contact Time'] }}",
+            "Additional Comments": "={{ $json['Additional Comments'] }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Adress",
+              "displayName": "Email Adress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Services Interested In",
+              "displayName": "Services Interested In",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Project Timeline",
+              "displayName": "Project Timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Preferred Contact Time",
+              "displayName": "Preferred Contact Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Additional Comments",
+              "displayName": "Additional Comments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        192
+      ],
+      "id": "c115b2dc-6164-48a1-b88c-e3f767163bab",
+      "name": "Append or update row in sheet"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        192
+      ],
+      "id": "84fcb057-7df0-4ae1-b00a-2fc65ee6620e",
+      "name": "Wait",
+      "webhookId": "08fa0796-b8fb-4ba0-b7d8-ee60fded0580"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a lead nurturing agent. Your job is to write an email to a new lead who just fill out the informatio using our website. We are providing AI consulting services. Your name is Sasha and you work on TechSquad Corp. Make sure your email is friendly and always sign off in a professional way. Tried not to use any placeholders like [Your Name], [Company Name] etc. Please only address the lead by their first name even if that entered their full name. \n\n\nHere are some Information about the lead:\nName:{{ $json.Name }}\nEmail:{{ $json['Email Adress'] }}\nServices Interested In:{{ $json['Services Interested In'] }}\nBudget Range:{{ $json['Budget Range'] }}\nProject Timeline:{{ $json['Project Timeline'] }}\nPreferred Contact Time:{{ $json['Preferred Contact Time'] }}\nAdditional Comments:{{ $json['Additional Comments'] }}\n\n\nYour email should be very personalized, based on the information lead send in. Tried to Thank them for thier intrest they specified and include any relevant informaiton. In the end, Don't Forget to add a call to action like if they have any questions or they like to scheduled a call.\n\nYou should also output three fields seperately, One fo email Subject called \"Subject\", One for email body called \"Body\", and one for \"Tag\". You must output these three fields or else the automation will break.\n\nThe \"Subject\" should always start with \"TechSquad Corp\" then a brief decription of email.\n\nHere's how you will decide the value of \"Tag\":\nHigh Level Lead:\nA deal with higher budget of over $7000 and interested in premium services and on urgent needs.\n\nMedium Level Lead:\nA deal with moderate budget of $4000 - $7000, interested in silver services and include flexible scheduling options.\n\nLow Level Lead:\nA deal with low budget less than $4000 interested in basic package and include flexible scheduling options.\n\n",
+              "role": "system"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        672,
+        192
+      ],
+      "id": "3c51919c-7b65-46ab-93de-d7c25567fb78",
+      "name": "Message a model"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09F382QNJG",
+          "mode": "list",
+          "cachedResultName": "lead-nurturing-team"
+        },
+        "text": "=New Alert !!\nName: {{ $('Append or update row in sheet').item.json.Name }}\nInterest: {{ $('Append or update row in sheet').item.json['Services Interested In'] }}\nBudget: {{ $('Append or update row in sheet').item.json['Budget Range'] }}\n\nCheck the lead in google sheets for more details:\nhttps://docs.google.com/spreadsheets/d/1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4/edit?usp=sharing",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1024,
+        384
+      ],
+      "id": "b37ea210-57fd-41ac-9ac5-11b3c709f30f",
+      "name": "Send Message To Team",
+      "webhookId": "03b300a6-e287-43a4-ae44-a081ce1f1600"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Append or update row in sheet').item.json['Email Adress'] }}",
+        "subject": "={{ $json.message.content.Subject }}",
+        "emailType": "text",
+        "message": "={{ $json.message.content.Body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "a8067c80-cc4d-4053-b22b-65fc6057ae3c",
+      "name": "Send Mail to Lead",
+      "webhookId": "e0a9ba12-84c9-4bb9-93d3-23c77a61bb91"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4",
+          "mode": "list",
+          "cachedResultName": "Lead Nurturing",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y6hspJW26BrY1dG9KcKeKEmhYjduWJlPbkTl-OxpfV4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Append or update row in sheet').item.json.Name }}",
+            "Status": "={{ $('Append or update row in sheet').item.json.Name }} was contacted by email at {{ $now.toFormat('MMMM dd, yyyy : hh:mm a') }}. The team has also been notified via Slack.",
+            "Tag": "={{ $json.message.content.Tag }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Adress",
+              "displayName": "Email Adress",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Services Interested In",
+              "displayName": "Services Interested In",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Project Timeline",
+              "displayName": "Project Timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Preferred Contact Time",
+              "displayName": "Preferred Contact Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Additional Comments",
+              "displayName": "Additional Comments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag",
+              "displayName": "Tag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1024,
+        192
+      ],
+      "id": "b0ec1318-7521-495e-a360-fb181eca4a9f",
+      "name": "Update Status & Tag"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 976,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "49b2fa4c-1139-4d0e-932f-997ad152333a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 576,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        960,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "a651a50c-1494-4054-a948-dd877d6c4400",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nAppend Lead Submitted data in excel then create a thank you email send it to the lead, append the lead status and tag, inform the team on slack about the lead.\n\n### Prerequisite\n- Google Sheets Credentials\n- Open ai Credentials\n- Gmail Credentials\n- Slack Credentials",
+        "height": 224,
+        "width": 864,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "256ad2de-3a3e-4a70-84c0-d67e5571bd98",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Lead Nurturing",
+        "height": 80,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "231c7960-a24e-4667-86b8-39faed4ee3b8",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send Mail to Lead",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update Status & Tag",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Message To Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bf849934-2155-4373-9355-007818875f82",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "S7z5j4Nmr0d7AEB6",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
