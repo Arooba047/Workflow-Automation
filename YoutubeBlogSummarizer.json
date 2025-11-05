@@ -1,0 +1,289 @@
+{
+  "name": "YoutubeBlogSummarizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bc12f45e-0651-4a75-975e-4c3f0be95388",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCsooa4yRKGN_zEE8iknghZA",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "575a06ab-f7e3-4ddf-964a-cb5f27427571",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/pintostudio~youtube-transcript-scraper/run-sync-get-dataset-items?token={{apifyApiKey}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"videoUrl\": \"{{ $json.link }}\"\n\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "8be6ea44-f3fe-41f4-9052-697a88bb30cb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ],
+      "id": "fdbc5df4-ba3b-4f85-a844-8e825f0f94a5",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "text",
+              "renameField": true,
+              "outputFieldName": "Transcript"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "d70add6e-fcf3-4d0d-ade5-215d9da33ed8",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "81a1cd2d-9892-4ea8-b2d3-2292c72c3590",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1136,
+        224
+      ],
+      "id": "c1aea8d2-df29-440d-9e35-b6bdd567c487",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Video Link:{{ $json.Transcript }}",
+        "options": {
+          "systemMessage": "=You are an expert video transcript summarizer. You job is to analyze the transcript of video and generate a summarize text about what's happening in the video, What are they talking about, and highlight the main points.\n\nThe generated content should be according to the video transcript. If they are talking about are character or a scenario so tried to give its context for better understanding of transcript. \n\nThe tone of your output should be story telling and according to the transcript."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        0
+      ],
+      "id": "109a952b-2709-4268-b0e5-9c35c5c98546",
+      "name": "AI Summarizer"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 1712,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "bb49f0e8-374a-4053-8c4e-96f0094bdcb8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1056,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "0f0b2b86-2141-4d26-aec8-72071afd89f6",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Youtube Blog Summarizer",
+        "height": 80,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "42abf853-cead-4fc8-8b74-8ed39802cdff",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nTake Youtube Channel Data from RSS read. Send HTTP request to APify to get the transcript then send it to AI model to create a summarizer of it.\n\n### Prerequisite\n- Apify API Key\n- Open AI Credentials",
+        "height": 192,
+        "width": 944,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "a9bc7371-b962-4673-9a17-406b33a4bc4c",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Summarizer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e28bc653-f997-40d7-b0e5-f520903a2aa4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "lh5xdXlRmuw4oAgZ",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
