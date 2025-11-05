@@ -1,0 +1,274 @@
+{
+  "name": "WeatherUpdate",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "17252d4e-0856-44ce-b062-10e2456181cc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "http://api.weatherapi.com/v1/current.json?key={{key}}&q=Lahore&aqi=yes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f93a46ed-6e68-47b4-8597-51259083bf6d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=City: {{ $json.location.name }}\nCountry: {{ $json.location.country }}\nTemperture in Celsius: {{ $json.current.temp_c }}\nTemperature in Fahrenheit: {{ $json.current.temp_f }}\nHumidity: {{ $json.current.humidity }}\nWeather Condition: {{ $json.current.condition.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=##Overview\nYou are a Funny Weather Report Agent Named Tempy. Your job is to analyze the current weather and generate an email informing the user about the weather and what precautions to take.\n\n##Role\nYou Role is to create a detailed and creative email about today weather. You have to take all the data from user prompt and display it in a readable and clear format.\n\n##Output\nYour Output email should contain these things:\n- Subject\n- Today Temperature in both Celsius and Fahrenheit\n- Humidity, Airquality\n- City and Country name\n-  Precautions to take\n\n##Example Email\nSubject: 🌤 Your Daily Weather Update – Stay Prepared!\n\nEmail Body:\n\nHi there,\n\nHere’s your weather update for today to help you plan your day better!\n\n📍 Location: [City], [Country]\n🌡 Temperature: [Temperature in Celsius] / [Temperature in Fahrenheit]\n💨 Air Quality: [Air Quality]\n💧 Humidity: [Humidity]\n\nWeather Highlights:\n\nSunny skies with light winds – a perfect day to step outside!\n\nUV levels are moderate, so don’t forget your sunscreen if you’re heading out.\n\nPrecautions & Tips:\n\nStay hydrated – carry water if you’re going outdoors.\n\nWear light, breathable clothing for comfort in warm weather.\n\nSensitive individuals may want to limit prolonged outdoor exposure due to moderate air quality.\n\nKeep an eye on weather updates if planning outdoor activities.\n\nFun Tip: Take a morning walk ☀️ or enjoy a cup of tea while soaking up the sun safely!\n\nStay safe and enjoy your day! 🌿\n\nBest regards,\nTempy"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "4b169672-388e-4e09-a8b6-7c336ad50dff",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        432,
+        224
+      ],
+      "id": "478df3e0-73ed-482c-bc2f-edc8d972a3f0",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"subject\": {\n      \"type\": \"string\",\n      \"description\": \"The subject line of the email, e.g., '🌤 Your Daily Weather Update – Stay Prepared!'\"\n    },\n    \"body\": {\n      \"type\": \"string\",\n      \"description\": \"The full email body containing location, temperature, air quality, humidity, and precautions.\"\n    }\n  },\n  \"required\": [\"subject\", \"body\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        608,
+        224
+      ],
+      "id": "0079ff30-96d6-405b-be88-b636fab29ce7",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "sendTo": "aroobaiqbal118@gmail.com",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.output.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        0
+      ],
+      "id": "d698ac65-a4e2-45b9-b295-f7db4e6618e7",
+      "name": "Send a message",
+      "webhookId": "8942df32-999f-4a41-8a1b-d3c35941cfe2"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger\n### Everyday",
+        "height": 224,
+        "width": 192,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "e1474893-5b3f-4382-b518-4cd713aab111",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "### Fetch Weather Update and Convert it in an e-mail",
+        "height": 224,
+        "width": 560,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "305a5fbf-cb45-4d78-bfee-347365e33925",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Send E-mail",
+        "height": 224,
+        "width": 176,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        768,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "13b38eac-f2c5-4fc0-9828-39da261796fa",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 176,
+        "width": 352,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "d30e9efd-1506-4123-889e-ab5e1539446f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Weather Update AI Agent",
+        "height": 80,
+        "width": 448
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "4b47d00e-21a7-48dc-a559-df59184ee76f",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "### Overview\nGet weather update form Weatherapi.com and send it to an AI agent which will create a very cool and funny email updating you about weather and send it to the user.\n\n### Prerequisite\n- weatherapi.com API key\n- Google Gemini Credentials\n- Gmail Credentials",
+        "height": 224,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "2571c3a1-badb-4872-8fa7-3144092defc8",
+      "name": "Sticky Note5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "468af620-c5de-4622-b863-6afe55a9fad1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "254d173519feb881de883ad084121f2606669bd1f56e577468c2f373c1be5756"
+  },
+  "id": "3gnWdzKVLCW28AQz",
+  "tags": [
+    {
+      "createdAt": "2025-08-22T09:18:34.266Z",
+      "updatedAt": "2025-08-22T09:18:34.266Z",
+      "id": "hnMyO38j2ruyxDNX",
+      "name": "LearningProjects"
+    }
+  ]
+}
