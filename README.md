@@ -89,6 +89,8 @@ Workflow Name	Description
 
 - HubSpot / Zoho / Adalo – CRM & app integrations
 
+- Supabase / Cohere
+
 **🧩 Future Additions**
 
 - AI-driven data enrichment workflows
