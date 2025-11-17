@@ -1,0 +1,3611 @@
+{
+  "name": "YouTube Chat Metadata RAG Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "YouTube Database Submission",
+        "formDescription": "Drop in a YouTube video URL",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Video Title",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "URL",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        672
+      ],
+      "id": "94e9c4de-8050-4a2e-8a39-38cb0e719835",
+      "name": "On form submission",
+      "webhookId": "a9dcfcaa-c800-4000-81df-2a142df4732e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/pintostudio~youtube-transcript-scraper/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "{{apify-token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "videoUrl",
+              "value": "={{ $json.URL }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        672
+      ],
+      "id": "761c32d0-4cab-4913-8689-2925732a19f9",
+      "name": "Get Transcript"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1504,
+        672
+      ],
+      "id": "a37d9192-7d30-49cf-808f-6e80def2f22b",
+      "name": "Supabase Vector Store"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $('Merge').item.json.text }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "videoTitle",
+                "value": "={{ $('On form submission').first().json['Video Title'] }}"
+              },
+              {
+                "name": "timestamp",
+                "value": "={{ $('Merge').item.json.timestamp.startFormatted }}-{{ $('Merge').item.json.timestamp.endFormatted }}"
+              },
+              {
+                "name": "videoURL",
+                "value": "={{ $('On form submission').item.json.URL }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        800
+      ],
+      "id": "55aa6e0b-5ae6-4457-b752-73c98c2b592b",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        144
+      ],
+      "id": "708d0091-0d1e-4306-ae8b-37b0f78122ba",
+      "name": "When chat message received",
+      "webhookId": "89df1a57-f248-4a00-8515-48bae1ce1b74"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to search through YouTube transcripts to answer the user's question.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "topK": 20,
+        "useReranker": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1408,
+        160
+      ],
+      "id": "5817a35b-999e-4d94-a407-319c99e386ef",
+      "name": "Supabase"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc",
+          "mode": "list",
+          "cachedResultName": "Youtube Chat Metadata",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ur4YOjXHSG30KZvxZHzHbANO-udaZ5wKzaKlxQiCYAc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('On form submission').item.json['Video Title'] }}",
+            "URL": "={{ $('On form submission').item.json.URL }}",
+            "Status": "Processed",
+            "Transcript": "={{ $('Transcript').first().json.combinedText }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Transcript",
+              "displayName": "Transcript",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1808,
+        672
+      ],
+      "id": "4094945d-4e12-4069-bd44-a443a0783977",
+      "name": "Append row in sheet",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node - Combine transcript text into one string (no newlines)\n\n// Get the input data (first item from the input)\nconst inputData = $input.all()[0].json;\n\n// Extract the data array\nconst transcriptData = inputData.data;\n\n// Filter out items that don't have text and combine all text segments\nconst combinedText = transcriptData\n  .filter(item => item.text) // Only include items with text property\n  .map(item => item.text.trim().replace(/\\n/g, ' ')) // Get the text, trim whitespace, and replace newlines with spaces\n  .join(' ') // Join with spaces\n  .replace(/\\s+/g, ' '); // Replace multiple spaces with single space\n\n// Return the combined text as a single item\nreturn [\n  {\n    json: {\n      combinedText: combinedText,\n      originalItemCount: transcriptData.length,\n      textSegmentCount: transcriptData.filter(item => item.text).length\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        592
+      ],
+      "id": "42d4b587-066c-422c-b734-004146addc4e",
+      "name": "Transcript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node - Group transcript into chunks of 20 with timestamps\n\n// Get the input data (first item from the input)\nconst inputData = $input.all()[0].json;\n\n// Extract the data array and filter out items without text\nconst transcriptData = inputData.data.filter(item => item.text);\n\n// Group into chunks of 20\nconst chunkSize = 20;\nconst chunks = [];\n\nfor (let i = 0; i < transcriptData.length; i += chunkSize) {\n  const chunk = transcriptData.slice(i, i + chunkSize);\n  \n  // Combine all text from this chunk\n  const combinedText = chunk\n    .map(item => item.text.trim())\n    .join(' ');\n  \n  // Calculate timestamp range\n  const firstItem = chunk[0];\n  const lastItem = chunk[chunk.length - 1];\n  \n  const startTime = parseFloat(firstItem.start);\n  const endTime = parseFloat(lastItem.start) + parseFloat(lastItem.dur);\n  \n  // Helper function to format seconds to MM:SS format\n  const formatTime = (seconds) => {\n    if (seconds < 60) {\n      return `${seconds.toFixed(3)}s`;\n    }\n    const minutes = Math.floor(seconds / 60);\n    const remainingSeconds = seconds % 60;\n    return `${minutes}:${remainingSeconds.toFixed(3).padStart(6, '0')}`;\n  };\n  \n  // Create the grouped object\n  chunks.push({\n    json: {\n      text: combinedText,\n      timestamp: {\n        start: startTime,\n        end: endTime,\n        duration: endTime - startTime,\n        startFormatted: formatTime(startTime),\n        endFormatted: formatTime(endTime),\n        durationFormatted: formatTime(endTime - startTime)\n      },\n      itemCount: chunk.length,\n      chunkNumber: Math.floor(i / chunkSize) + 1\n    }\n  });\n}\n\n// Return all chunks as separate items\nreturn chunks;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        768
+      ],
+      "id": "f0646ae3-b14a-428f-8106-aec3cff8392e",
+      "name": "Timestamps"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1328,
+        672
+      ],
+      "id": "e1e36486-1df5-4e01-b5ad-e3c990f442f4",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc",
+          "mode": "list",
+          "cachedResultName": "Youtube Chat Metadata",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc/edit#gid=0"
+        },
+        "event": "rowUpdate",
+        "options": {
+          "columnsToWatch": [
+            "Status"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        784,
+        1168
+      ],
+      "id": "4b8ac950-8a36-4ca0-b12d-c3b0b01018fd",
+      "name": "Google Sheets Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dd6297c2-fadf-440d-aa41-5a3772767cca",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "Remove",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        960,
+        1168
+      ],
+      "id": "db9d77f0-6e0c-4079-adeb-422b621b2e13",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "documents",
+        "filterType": "string",
+        "filterString": "=metadata->>videoURL=like.*{{ $json.url }}"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        1168
+      ],
+      "id": "7cc6567e-9c3a-478e-8e21-6ed1463c35d9",
+      "name": "Delete a row",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc",
+          "mode": "list",
+          "cachedResultName": "Youtube Chat Metadata",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1N53zSr_bNwn-7IlThQXz8EiuYHNzZ2XJ58AFIvgR8Hc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ur4YOjXHSG30KZvxZHzHbANO-udaZ5wKzaKlxQiCYAc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "URL": "={{ $('Edit Fields').item.json.url }}",
+            "Status": "Removed"
+          },
+          "matchingColumns": [
+            "URL"
+          ],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Transcript",
+              "displayName": "Transcript",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1744,
+        1168
+      ],
+      "id": "958ac77c-9410-485a-bdb3-d06cf689d2f6",
+      "name": "Update row in sheet",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a819cb4c-30ff-4d23-b176-a2d7a77f91e9",
+              "name": "url",
+              "value": "={{ $json.URL }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1392,
+        1168
+      ],
+      "id": "1717e890-71a4-4cf7-aefa-066bc3c6aa86",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        1168
+      ],
+      "id": "a22793c0-2745-4c68-ab76-7e1fb7463dd8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        1808
+      ],
+      "id": "57ba081e-1fb4-417f-9ea9-bb948ef6ce1b",
+      "name": "GPT 4.1-mini1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1424,
+        1792
+      ],
+      "id": "01d2253f-9d42-478b-8fb3-2f011a5e6491",
+      "name": "Embeddings OpenAI2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Query }} from {{ $json['Video Title'] }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI assistant with access to a tool called Supabase, which contains transcripts of YouTube videos.\n\nWhen the user asks a question, you may query Supabase multiple times to gather the most relevant information. Use these results to generate a complete and accurate answer.\n\nFor every fact, insight, or quote you include, explicitly cite the video title, timestamp, and video URL, all of which are available in the metadata. Include direct quotes from the transcript when helpful, and always cite sources inline in this format:\n“quoted content” (Video Title, 03:12 — Watch here)\n\nQuery iteratively until you are confident you have enough context to respond helpfully."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        1648
+      ],
+      "id": "eb4d6419-c328-4daf-8040-703bc63af2f6",
+      "name": "RAG Agent 2"
+    },
+    {
+      "parameters": {
+        "formTitle": "Video Insights",
+        "formDescription": "Specify the YouTube Video you want insights from",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Video Title",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Query",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        1648
+      ],
+      "id": "b073c3d1-ce60-426d-a099-d07514d51526",
+      "name": "On form submission1",
+      "webhookId": "a3637fd4-c86e-443c-b3e6-d901f44c1c40"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to search through YouTube transcripts to answer the user's question.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "videoTitle",
+                "value": "={{ $('On form submission1').item.json['Video Title'] }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1408,
+        1648
+      ],
+      "id": "fb1ac0b9-72ef-4d83-9529-1d8457bf3c0b",
+      "name": "Supabase Vector Store1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# YouTube Transcript RAG Agent\n",
+        "height": 460,
+        "width": 1120,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        0
+      ],
+      "id": "817361e5-899d-40c2-90ab-62bd5efcf0b1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# YouTube Transcript RAG Agent\n## w/ metadata filter\n",
+        "height": 460,
+        "width": 1120
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        1504
+      ],
+      "id": "79d41949-9eb7-4d1b-8c28-f29d3ad71039",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Transcript Pipeline",
+        "height": 480,
+        "width": 1300,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        480
+      ],
+      "id": "549dfbcb-c300-474d-8e3d-a72d74c0dd7b",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Transcript Pipeline\n## Delete\n",
+        "height": 480,
+        "width": 1300,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        992
+      ],
+      "id": "04f7c00d-ecf8-4b47-afb5-c1e1037ce034",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI assistant with access to a tool called Supabase, which contains transcripts of YouTube videos.\n\nWhen the user asks a question, you may query Supabase multiple times to gather the most relevant information. Use these results to generate a complete and accurate answer.\n\nFor every fact, insight, or quote you include, explicitly cite the video title, timestamp, and video URL, all of which are available in the metadata. Include direct quotes from the transcript when helpful, and always cite sources inline in this format:\n“quoted content” (Video Title, 03:12 — Watch here)\n\nQuery iteratively until you are confident you have enough context to respond helpfully."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        144
+      ],
+      "id": "a1848714-b33b-41bf-987d-a1b541fb45cd",
+      "name": "YouTube RAG Agent"
+    },
+    {
+      "parameters": {
+        "content": "# 🛠️ Setup Guide  \n**Author:** Arooba Iqbal\n\nFollow these steps to get your workflow ready to chat with video transcripts and enriched metadata:\n\n### ✅ Step 1: Connect Your Credentials  \nEnsure you have the following credentials connected in n8n:\n- [GoogleGemini](https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-pro)\n- [OpenAI](https://platform.openai.com/)\n- [Cohere](https://cohere.com/)\n- [Supabase](https://supabase.com/)\n\nThese will power your chat model, embedding model, and vector database.\n\n### ✅ Step 2: Connect to [Apify](https://www.apify.com/)  \nUse Apify to scrape YouTube transcripts and store them into your vector DB.  \n\n\n### ✅ Step 3: Link Your Google Sheets  \nConnect your Google credentials\n\n### 💡 Final Step: Start Testing  \nRun the workflow with your connected data and start chatting with enriched transcripts.  \nTry out metadata filtering and chunk enhancement to see how powerful this setup can be!\n",
+        "height": 680,
+        "width": 680
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "30ad6720-4a96-4a85-8727-caac3f0fff6e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        800
+      ],
+      "id": "e25d4851-95a4-493c-81b9-6371b071c861",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4ViGNmr6lxUXqLB6",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        288
+      ],
+      "id": "4820850b-1deb-4291-b322-e037d1ccd9ce",
+      "name": "Embeddings Google Gemini1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        288
+      ],
+      "id": "0234581f-ff2a-4d02-ad03-80f6a940fc5d",
+      "name": "Reranker"
+    },
+    {
+      "parameters": {
+        "content": "## How it's working \n- On form submission, The user will input Video title and URL.\n- Apify will then provide the whole transcript of the video......\n- Then it passes through two functions node, One will generate the whole transcript of the video, other will generate the whole video duration and timestamps.\n- Then the merged data append on Supbase Database table.\n- Default Data Loader do the following:\nThis node loads or prepares your raw text data before embeddings.\nIt usually does one of these:\nLoads text/files from a folder\nConverts documents into chunks\nCleans/normalizes the content\nOutputs an array of document objects\n\n- Embedding node converts the text (from Default Data Loader) into vector embeddings.\n",
+        "height": 352,
+        "width": 688
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2032,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "8110066b-5422-46c1-bc03-3b706b1aaf0c",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        352
+      ],
+      "id": "c97d71b2-e5b5-4e97-90c4-90fdc0f7b7e6",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "content": "## How it's working\n- The user will ask any question from the chat box\n- Our RAG Agent will generate a response by using Supabase as a knowledge base.\n- There's a reranker which will help to analyze and rank the most related response according to user query.",
+        "height": 176,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1856,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "230aea1d-e843-4301-a908-f53a8d7ca133",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## How's it working\n- The purpose of this flow is if the admin wants to delete the specific knowledge base from Supabase.\n- Flow triggers if the admin chang the status of google sheet row to \"remove\".\n- So it will delete the related content from supabase and update the row status to \"removed\".",
+        "height": 192,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2032,
+        992
+      ],
+      "typeVersion": 1,
+      "id": "f14192bc-98b7-413b-81ba-cf4a962a6282",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## How's it working\nWe used this in case if user wants to search response from a specific video, so for that we will add filtering of metadata. so the generated response will belongs to the specific video user mentioned.",
+        "height": 176,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1856,
+        1504
+      ],
+      "typeVersion": 1,
+      "id": "7dff27be-add1-4c06-a7ae-6973d352b2e3",
+      "name": "Sticky Note8"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Video Title": "Beginner’s Guide to Metadata: Make Your RAG Agents Smarter",
+          "URL": "https://www.youtube.com/watch?v=lnm0PMi-4mE",
+          "submittedAt": "2025-11-17T18:32:44.187+05:00",
+          "formMode": "test"
+        }
+      }
+    ],
+    "Get Transcript": [
+      {
+        "json": {
+          "data": [
+            {
+              "start": "0.000",
+              "dur": "78.000"
+            },
+            {
+              "start": "0.080",
+              "dur": "1.280",
+              "text": "Today I'm going to be talking about the"
+            },
+            {
+              "start": "1.360",
+              "dur": "1.519",
+              "text": "different ways you can use metadata to"
+            },
+            {
+              "start": "2.879",
+              "dur": "1.440",
+              "text": "make your rag agents much more"
+            },
+            {
+              "start": "4.319",
+              "dur": "1.921",
+              "text": "intelligent. Not only does metadata let"
+            },
+            {
+              "start": "6.240",
+              "dur": "2.080",
+              "text": "us organize and filter through our data,"
+            },
+            {
+              "start": "8.320",
+              "dur": "2.000",
+              "text": "but it also lets us enrich it so that we"
+            },
+            {
+              "start": "10.320",
+              "dur": "1.760",
+              "text": "can get way more context as to what"
+            },
+            {
+              "start": "12.080",
+              "dur": "1.840",
+              "text": "chunks we're looking at. If it doesn't"
+            },
+            {
+              "start": "13.920",
+              "dur": "1.440",
+              "text": "make too much sense to you yet, don't"
+            },
+            {
+              "start": "15.360",
+              "dur": "1.280",
+              "text": "worry. We're going to break it all down."
+            },
+            {
+              "start": "16.640",
+              "dur": "1.120",
+              "text": "I'm going to run through some live"
+            },
+            {
+              "start": "17.760",
+              "dur": "1.439",
+              "text": "examples and by the end there'll"
+            },
+            {
+              "start": "19.199",
+              "dur": "1.441",
+              "text": "definitely be thinking about how you can"
+            },
+            {
+              "start": "20.640",
+              "dur": "2.000",
+              "text": "apply metadata to your own use case. All"
+            },
+            {
+              "start": "22.640",
+              "dur": "0.960",
+              "text": "right, so I don't want to waste any"
+            },
+            {
+              "start": "23.600",
+              "dur": "1.040",
+              "text": "time. We're going to start off with a"
+            },
+            {
+              "start": "24.640",
+              "dur": "1.360",
+              "text": "quick demo so I can show you guys what"
+            },
+            {
+              "start": "26.000",
+              "dur": "1.920",
+              "text": "this metadata stuff looks like by"
+            },
+            {
+              "start": "27.920",
+              "dur": "1.840",
+              "text": "talking to our YouTube transcript rag"
+            },
+            {
+              "start": "29.760",
+              "dur": "1.359",
+              "text": "agent. So I'm going to send off this"
+            },
+            {
+              "start": "31.119",
+              "dur": "1.279",
+              "text": "message that says, \"What's the"
+            },
+            {
+              "start": "32.399",
+              "dur": "1.521",
+              "text": "difference between a relational database"
+            },
+            {
+              "start": "33.920",
+              "dur": "2.000",
+              "text": "and a vector database?\" Our agent is"
+            },
+            {
+              "start": "35.920",
+              "dur": "1.280",
+              "text": "going to search through Superbase. It's"
+            },
+            {
+              "start": "37.200",
+              "dur": "1.920",
+              "text": "going to use a reranker to sort those"
+            },
+            {
+              "start": "39.120",
+              "dur": "1.759",
+              "text": "results. And now we're going to get our"
+            },
+            {
+              "start": "40.879",
+              "dur": "2.161",
+              "text": "answer based on a YouTube transcript."
+            },
+            {
+              "start": "43.040",
+              "dur": "1.920",
+              "text": "And you can see, not only was our agent"
+            },
+            {
+              "start": "44.960",
+              "dur": "1.759",
+              "text": "able to search through and answer for"
+            },
+            {
+              "start": "46.719",
+              "dur": "2.160",
+              "text": "us, it also gave us the exact YouTube"
+            },
+            {
+              "start": "48.879",
+              "dur": "1.840",
+              "text": "video that it pulled this data from, the"
+            },
+            {
+              "start": "50.719",
+              "dur": "1.680",
+              "text": "exact timestamp that it pulled the data"
+            },
+            {
+              "start": "52.399",
+              "dur": "1.840",
+              "text": "from, and then we can also go right here"
+            },
+            {
+              "start": "54.239",
+              "dur": "1.921",
+              "text": "and click into the link if we want to"
+            },
+            {
+              "start": "56.160",
+              "dur": "2.239",
+              "text": "watch the full video."
+            },
+            {
+              "start": "58.399",
+              "dur": "1.201",
+              "text": "Imagine having a team of"
+            },
+            {
+              "start": "59.600",
+              "dur": "1.279",
+              "text": "And the only reason it was able to give"
+            },
+            {
+              "start": "60.879",
+              "dur": "2.160",
+              "text": "us this extra context is because we"
+            },
+            {
+              "start": "63.039",
+              "dur": "2.080",
+              "text": "enriched the chunks with this"
+            },
+            {
+              "start": "65.119",
+              "dur": "1.521",
+              "text": "information in the metadata. So that's"
+            },
+            {
+              "start": "66.640",
+              "dur": "1.280",
+              "text": "the use case that we're going over in"
+            },
+            {
+              "start": "67.920",
+              "dur": "1.680",
+              "text": "this video. But metadata essentially"
+            },
+            {
+              "start": "69.600",
+              "dur": "1.920",
+              "text": "just means data about data. So, whatever"
+            },
+            {
+              "start": "71.520",
+              "dur": "1.279",
+              "text": "you're loading in, you could enrich it"
+            },
+            {
+              "start": "72.799",
+              "dur": "1.841",
+              "text": "with metadata like the date or the"
+            },
+            {
+              "start": "74.640",
+              "dur": "1.920",
+              "text": "department or the author or the file"
+            },
+            {
+              "start": "76.560",
+              "dur": "1.840",
+              "text": "name or the file size, whatever you"
+            },
+            {
+              "start": "78.000",
+              "dur": "137.000"
+            },
+            {
+              "start": "78.400",
+              "dur": "1.600",
+              "text": "want. Before I break down this pipeline"
+            },
+            {
+              "start": "80.000",
+              "dur": "1.280",
+              "text": "where we're getting the transcript data,"
+            },
+            {
+              "start": "81.280",
+              "dur": "1.760",
+              "text": "preparing it, standardizing it, and then"
+            },
+            {
+              "start": "83.040",
+              "dur": "2.000",
+              "text": "enriching it with metadata to vectorize"
+            },
+            {
+              "start": "85.040",
+              "dur": "1.920",
+              "text": "it, let's hop into a quick Excal so I"
+            },
+            {
+              "start": "86.960",
+              "dur": "2.080",
+              "text": "can explain real quick why metadata is"
+            },
+            {
+              "start": "89.040",
+              "dur": "1.439",
+              "text": "important and how it works with vector"
+            },
+            {
+              "start": "90.479",
+              "dur": "1.441",
+              "text": "search. If you've been following my"
+            },
+            {
+              "start": "91.920",
+              "dur": "1.280",
+              "text": "channel for a while now, you've probably"
+            },
+            {
+              "start": "93.200",
+              "dur": "2.400",
+              "text": "seen this exact Excal visualization, but"
+            },
+            {
+              "start": "95.600",
+              "dur": "1.280",
+              "text": "either way, let's run through it real"
+            },
+            {
+              "start": "96.880",
+              "dur": "1.360",
+              "text": "quick. And I'm also going to keep this"
+            },
+            {
+              "start": "98.240",
+              "dur": "1.440",
+              "text": "example relevant to the one that we'll"
+            },
+            {
+              "start": "99.680",
+              "dur": "1.520",
+              "text": "be running through an Nitn just to keep"
+            },
+            {
+              "start": "101.200",
+              "dur": "1.520",
+              "text": "everything consistent. So what we start"
+            },
+            {
+              "start": "102.720",
+              "dur": "2.000",
+              "text": "off with over here is our transcript."
+            },
+            {
+              "start": "104.720",
+              "dur": "1.200",
+              "text": "And then what happens is we have to"
+            },
+            {
+              "start": "105.920",
+              "dur": "1.280",
+              "text": "chunk it up and run it through an"
+            },
+            {
+              "start": "107.200",
+              "dur": "1.599",
+              "text": "embeddings model in order to get turned"
+            },
+            {
+              "start": "108.799",
+              "dur": "1.680",
+              "text": "into different vectors. And each of"
+            },
+            {
+              "start": "110.479",
+              "dur": "2.401",
+              "text": "these dots or vector points is basically"
+            },
+            {
+              "start": "112.880",
+              "dur": "1.680",
+              "text": "associated with one chunk of the"
+            },
+            {
+              "start": "114.560",
+              "dur": "2.160",
+              "text": "transcript. So transcript could have 20"
+            },
+            {
+              "start": "116.720",
+              "dur": "1.999",
+              "text": "chunks, 30 chunks, 50 chunks just"
+            },
+            {
+              "start": "118.719",
+              "dur": "1.760",
+              "text": "depending on how long the video is. And"
+            },
+            {
+              "start": "120.479",
+              "dur": "2.161",
+              "text": "so the issue here is without metadata,"
+            },
+            {
+              "start": "122.640",
+              "dur": "1.600",
+              "text": "when we're looking back at this specific"
+            },
+            {
+              "start": "124.240",
+              "dur": "2.000",
+              "text": "chunk, we actually don't know which"
+            },
+            {
+              "start": "126.240",
+              "dur": "2.480",
+              "text": "YouTube video it came from. So if we put"
+            },
+            {
+              "start": "128.720",
+              "dur": "1.519",
+              "text": "three YouTube video transcripts in our"
+            },
+            {
+              "start": "130.239",
+              "dur": "1.921",
+              "text": "vector database, transcript A,"
+            },
+            {
+              "start": "132.160",
+              "dur": "2.240",
+              "text": "transcript B, and transcript C, with"
+            },
+            {
+              "start": "134.400",
+              "dur": "2.400",
+              "text": "metadata, we can give each chunk extra"
+            },
+            {
+              "start": "136.800",
+              "dur": "2.079",
+              "text": "information like the title of the full"
+            },
+            {
+              "start": "138.879",
+              "dur": "1.921",
+              "text": "video it came from, or the URL of the"
+            },
+            {
+              "start": "140.800",
+              "dur": "1.840",
+              "text": "full video it came from, or the"
+            },
+            {
+              "start": "142.640",
+              "dur": "2.400",
+              "text": "timestamp of this specific chunk in the"
+            },
+            {
+              "start": "145.040",
+              "dur": "1.680",
+              "text": "transcript. And without this type of"
+            },
+            {
+              "start": "146.720",
+              "dur": "2.080",
+              "text": "metadata, we would have no idea the type"
+            },
+            {
+              "start": "148.800",
+              "dur": "1.680",
+              "text": "of insights we're getting back. And we"
+            },
+            {
+              "start": "150.480",
+              "dur": "1.440",
+              "text": "honestly wouldn't have that much trust"
+            },
+            {
+              "start": "151.920",
+              "dur": "1.679",
+              "text": "when our agent responds to us because it"
+            },
+            {
+              "start": "153.599",
+              "dur": "2.241",
+              "text": "can't back it up with an actual source."
+            },
+            {
+              "start": "155.840",
+              "dur": "1.360",
+              "text": "And then one more thing to keep in mind"
+            },
+            {
+              "start": "157.200",
+              "dur": "3.520",
+              "text": "is the metadata is just data about data."
+            },
+            {
+              "start": "160.720",
+              "dur": "2.640",
+              "text": "So the metadata has no effect on the"
+            },
+            {
+              "start": "163.360",
+              "dur": "1.760",
+              "text": "actual meaning of the chunk. It has no"
+            },
+            {
+              "start": "165.120",
+              "dur": "1.920",
+              "text": "effect on where the chunk gets placed in"
+            },
+            {
+              "start": "167.040",
+              "dur": "1.680",
+              "text": "the vector database. So when we're"
+            },
+            {
+              "start": "168.720",
+              "dur": "1.280",
+              "text": "searching through our vector database,"
+            },
+            {
+              "start": "170.000",
+              "dur": "1.519",
+              "text": "the query gets embedded. It gets put"
+            },
+            {
+              "start": "171.519",
+              "dur": "1.681",
+              "text": "into the vector database. and then the"
+            },
+            {
+              "start": "173.200",
+              "dur": "1.679",
+              "text": "nearest chunk or nearest couple chunks,"
+            },
+            {
+              "start": "174.879",
+              "dur": "2.321",
+              "text": "however you set it up, get pulled back"
+            },
+            {
+              "start": "177.200",
+              "dur": "2.160",
+              "text": "just based on the actual transcript"
+            },
+            {
+              "start": "179.360",
+              "dur": "2.000",
+              "text": "meaning. But then once we get the"
+            },
+            {
+              "start": "181.360",
+              "dur": "1.680",
+              "text": "transcript back and we realize that it's"
+            },
+            {
+              "start": "183.040",
+              "dur": "1.760",
+              "text": "relevant to the query, then we'll pull"
+            },
+            {
+              "start": "184.800",
+              "dur": "2.079",
+              "text": "in the metadata and look at it for more"
+            },
+            {
+              "start": "186.879",
+              "dur": "1.681",
+              "text": "context. And then of course you could do"
+            },
+            {
+              "start": "188.560",
+              "dur": "1.440",
+              "text": "things like metadata filtering where you"
+            },
+            {
+              "start": "190.000",
+              "dur": "1.200",
+              "text": "could say, okay, you know, I have"
+            },
+            {
+              "start": "191.200",
+              "dur": "1.759",
+              "text": "transcript A, B, and C in my vector"
+            },
+            {
+              "start": "192.959",
+              "dur": "2.081",
+              "text": "database, but for this specific query, I"
+            },
+            {
+              "start": "195.040",
+              "dur": "1.600",
+              "text": "only want to look at transcript C"
+            },
+            {
+              "start": "196.640",
+              "dur": "1.760",
+              "text": "because I know that's the video that I"
+            },
+            {
+              "start": "198.400",
+              "dur": "2.400",
+              "text": "want some insights from. So the three"
+            },
+            {
+              "start": "200.800",
+              "dur": "2.400",
+              "text": "big benefits of having metadata for your"
+            },
+            {
+              "start": "203.200",
+              "dur": "2.640",
+              "text": "vector database rag is that you can get"
+            },
+            {
+              "start": "205.840",
+              "dur": "1.520",
+              "text": "more context when you're pulling stuff"
+            },
+            {
+              "start": "207.360",
+              "dur": "1.680",
+              "text": "back. You can keep your data a little"
+            },
+            {
+              "start": "209.040",
+              "dur": "2.400",
+              "text": "more organized and segmented and then of"
+            },
+            {
+              "start": "211.440",
+              "dur": "2.240",
+              "text": "course you can filter using metadata to"
+            },
+            {
+              "start": "213.680",
+              "dur": "1.919",
+              "text": "get only what you want back. So now that"
+            },
+            {
+              "start": "215.000",
+              "dur": "324.000"
+            },
+            {
+              "start": "215.599",
+              "dur": "1.200",
+              "text": "that's out of the way, let's hop into"
+            },
+            {
+              "start": "216.799",
+              "dur": "1.440",
+              "text": "Naden and we'll take a look at these"
+            },
+            {
+              "start": "218.239",
+              "dur": "1.601",
+              "text": "different pipelines and how the metadata"
+            },
+            {
+              "start": "219.840",
+              "dur": "2.080",
+              "text": "is actually working. Okay, so we just"
+            },
+            {
+              "start": "221.920",
+              "dur": "1.599",
+              "text": "saw the chat functionality where we're"
+            },
+            {
+              "start": "223.519",
+              "dur": "2.161",
+              "text": "talking with Subbase. Now let's look at"
+            },
+            {
+              "start": "225.680",
+              "dur": "2.240",
+              "text": "the actual transcripts pipeline of how"
+            },
+            {
+              "start": "227.920",
+              "dur": "2.080",
+              "text": "we're getting data into our Superbase"
+            },
+            {
+              "start": "230.000",
+              "dur": "2.640",
+              "text": "vector store with metadata. So before we"
+            },
+            {
+              "start": "232.640",
+              "dur": "1.360",
+              "text": "run this pipeline, let me just real"
+            },
+            {
+              "start": "234.000",
+              "dur": "2.000",
+              "text": "quick go into Subbase to show you guys"
+            },
+            {
+              "start": "236.000",
+              "dur": "1.920",
+              "text": "the transcript that's currently in here."
+            },
+            {
+              "start": "237.920",
+              "dur": "1.440",
+              "text": "This is this YouTube video that you guys"
+            },
+            {
+              "start": "239.360",
+              "dur": "2.720",
+              "text": "saw in the demo. But as you can see each"
+            },
+            {
+              "start": "242.080",
+              "dur": "1.760",
+              "text": "of these different chunks, we have the"
+            },
+            {
+              "start": "243.840",
+              "dur": "2.000",
+              "text": "content which is just text. And then in"
+            },
+            {
+              "start": "245.840",
+              "dur": "2.640",
+              "text": "the metadata of each one, we have the"
+            },
+            {
+              "start": "248.480",
+              "dur": "1.920",
+              "text": "timestamp of where this chunk came from."
+            },
+            {
+              "start": "250.400",
+              "dur": "1.759",
+              "text": "We have the video title and then we have"
+            },
+            {
+              "start": "252.159",
+              "dur": "2.321",
+              "text": "the video URL. So that's exactly what"
+            },
+            {
+              "start": "254.480",
+              "dur": "1.440",
+              "text": "happens to every single YouTube video"
+            },
+            {
+              "start": "255.920",
+              "dur": "2.400",
+              "text": "that we process into our database. Okay,"
+            },
+            {
+              "start": "258.320",
+              "dur": "1.360",
+              "text": "so I have this set up to basically"
+            },
+            {
+              "start": "259.680",
+              "dur": "1.679",
+              "text": "trigger on a form submission if we want"
+            },
+            {
+              "start": "261.359",
+              "dur": "2.881",
+              "text": "to put a video into our database. So I'm"
+            },
+            {
+              "start": "264.240",
+              "dur": "1.360",
+              "text": "going to hit execute workflow. It's"
+            },
+            {
+              "start": "265.600",
+              "dur": "1.360",
+              "text": "going to pull up this form that prompts"
+            },
+            {
+              "start": "266.960",
+              "dur": "2.560",
+              "text": "us to drop in a video title and a URL."
+            },
+            {
+              "start": "269.520",
+              "dur": "1.360",
+              "text": "So I'm going to drop in this video from"
+            },
+            {
+              "start": "270.880",
+              "dur": "1.680",
+              "text": "Anthropic where they're sitting on a"
+            },
+            {
+              "start": "272.560",
+              "dur": "1.680",
+              "text": "couch and they're talking about tips for"
+            },
+            {
+              "start": "274.240",
+              "dur": "1.600",
+              "text": "building effective AI agents. What"
+            },
+            {
+              "start": "275.840",
+              "dur": "1.200",
+              "text": "happens first is that we're going to"
+            },
+            {
+              "start": "277.040",
+              "dur": "1.920",
+              "text": "Ampify in order to scrape the YouTube"
+            },
+            {
+              "start": "278.960",
+              "dur": "1.360",
+              "text": "transcript. We're going to put together"
+            },
+            {
+              "start": "280.320",
+              "dur": "1.680",
+              "text": "the full YouTube transcript. We're going"
+            },
+            {
+              "start": "282.000",
+              "dur": "1.759",
+              "text": "to grab the timestamps, merge it all"
+            },
+            {
+              "start": "283.759",
+              "dur": "1.440",
+              "text": "together, and then that's actually what"
+            },
+            {
+              "start": "285.199",
+              "dur": "1.761",
+              "text": "gets vectorized, and then it also"
+            },
+            {
+              "start": "286.960",
+              "dur": "1.760",
+              "text": "updates us in our Google sheet. So, we"
+            },
+            {
+              "start": "288.720",
+              "dur": "1.360",
+              "text": "can come in here real quick and see"
+            },
+            {
+              "start": "290.080",
+              "dur": "1.760",
+              "text": "which videos currently exist in our"
+            },
+            {
+              "start": "291.840",
+              "dur": "1.600",
+              "text": "vector database. And now, let's dive"
+            },
+            {
+              "start": "293.440",
+              "dur": "1.360",
+              "text": "into each of these nodes so you guys can"
+            },
+            {
+              "start": "294.800",
+              "dur": "1.839",
+              "text": "see what's going on. The first one is"
+            },
+            {
+              "start": "296.639",
+              "dur": "2.881",
+              "text": "our HTTP request to Ampify to scrape the"
+            },
+            {
+              "start": "299.520",
+              "dur": "1.280",
+              "text": "transcript. It's a really simple"
+            },
+            {
+              "start": "300.800",
+              "dur": "1.440",
+              "text": "request. We're basically just giving it"
+            },
+            {
+              "start": "302.240",
+              "dur": "2.239",
+              "text": "the video URL, which came right here"
+            },
+            {
+              "start": "304.479",
+              "dur": "2.401",
+              "text": "from the actual form submission. And"
+            },
+            {
+              "start": "306.880",
+              "dur": "2.080",
+              "text": "then what it gives us is this kind of"
+            },
+            {
+              "start": "308.960",
+              "dur": "2.959",
+              "text": "weird item where we have like hundreds"
+            },
+            {
+              "start": "311.919",
+              "dur": "2.081",
+              "text": "of objects in here and each object has a"
+            },
+            {
+              "start": "314.000",
+              "dur": "2.400",
+              "text": "start time, a duration, and then text."
+            },
+            {
+              "start": "316.400",
+              "dur": "2.320",
+              "text": "And so it's just really split up and not"
+            },
+            {
+              "start": "318.720",
+              "dur": "1.600",
+              "text": "exactly the way that we wanted it. And"
+            },
+            {
+              "start": "320.320",
+              "dur": "1.280",
+              "text": "by the way, if you guys download this"
+            },
+            {
+              "start": "321.600",
+              "dur": "1.360",
+              "text": "template and you want to get set up, all"
+            },
+            {
+              "start": "322.960",
+              "dur": "1.679",
+              "text": "you'll have to do is go to Apify and put"
+            },
+            {
+              "start": "324.639",
+              "dur": "2.641",
+              "text": "in your own Aify API key right here."
+            },
+            {
+              "start": "327.280",
+              "dur": "1.440",
+              "text": "When you get to Appify, make sure to use"
+            },
+            {
+              "start": "328.720",
+              "dur": "2.479",
+              "text": "code 30 Nate Herk for 30% off for 3"
+            },
+            {
+              "start": "331.199",
+              "dur": "1.201",
+              "text": "months. And then you'll come down here"
+            },
+            {
+              "start": "332.400",
+              "dur": "1.680",
+              "text": "to your settings. You'll click on API"
+            },
+            {
+              "start": "334.080",
+              "dur": "1.839",
+              "text": "and integrations. And then right here is"
+            },
+            {
+              "start": "335.919",
+              "dur": "2.481",
+              "text": "where you'll copy your personal API key"
+            },
+            {
+              "start": "338.400",
+              "dur": "1.359",
+              "text": "and then you just have to paste it in"
+            },
+            {
+              "start": "339.759",
+              "dur": "1.681",
+              "text": "like I said right here. Just make sure"
+            },
+            {
+              "start": "341.440",
+              "dur": "1.280",
+              "text": "to keep that key private because it's"
+            },
+            {
+              "start": "342.720",
+              "dur": "1.440",
+              "text": "kind of like your password. So from"
+            },
+            {
+              "start": "344.160",
+              "dur": "1.840",
+              "text": "there, what I decided to do was I wanted"
+            },
+            {
+              "start": "346.000",
+              "dur": "2.240",
+              "text": "to clean it up and get one string of the"
+            },
+            {
+              "start": "348.240",
+              "dur": "2.480",
+              "text": "entire full context. So I decided to use"
+            },
+            {
+              "start": "350.720",
+              "dur": "1.840",
+              "text": "a code node for this. Now what I did"
+            },
+            {
+              "start": "352.560",
+              "dur": "1.680",
+              "text": "here in this code node just to show you"
+            },
+            {
+              "start": "354.240",
+              "dur": "2.080",
+              "text": "guys my thought process. I come here and"
+            },
+            {
+              "start": "356.320",
+              "dur": "2.240",
+              "text": "I realize, okay, I have this incoming"
+            },
+            {
+              "start": "358.560",
+              "dur": "2.000",
+              "text": "JSON and I want to use code to clean it"
+            },
+            {
+              "start": "360.560",
+              "dur": "1.600",
+              "text": "up. What I'm going to do is I'm just"
+            },
+            {
+              "start": "362.160",
+              "dur": "1.920",
+              "text": "going to copy a bit of this JSON right"
+            },
+            {
+              "start": "364.080",
+              "dur": "1.679",
+              "text": "here. just so I can understand the"
+            },
+            {
+              "start": "365.759",
+              "dur": "2.160",
+              "text": "schema. And then I go over to Claude and"
+            },
+            {
+              "start": "367.919",
+              "dur": "1.601",
+              "text": "I say, \"Help me write a code node in"
+            },
+            {
+              "start": "369.520",
+              "dur": "1.920",
+              "text": "Nitn that will receive this incoming"
+            },
+            {
+              "start": "371.440",
+              "dur": "2.240",
+              "text": "JSON schema.\" I paste in the schema and"
+            },
+            {
+              "start": "373.680",
+              "dur": "1.600",
+              "text": "then I say, I need it to split out all"
+            },
+            {
+              "start": "375.280",
+              "dur": "2.160",
+              "text": "of the text as one giant string because"
+            },
+            {
+              "start": "377.440",
+              "dur": "1.920",
+              "text": "we're processing a transcript. So I want"
+            },
+            {
+              "start": "379.360",
+              "dur": "1.839",
+              "text": "all of the text to flow together as one"
+            },
+            {
+              "start": "381.199",
+              "dur": "2.000",
+              "text": "string in one item. It spits out the"
+            },
+            {
+              "start": "383.199",
+              "dur": "2.241",
+              "text": "code. I paste it in. I try it out and"
+            },
+            {
+              "start": "385.440",
+              "dur": "2.479",
+              "text": "what do you know? We get one item, which"
+            },
+            {
+              "start": "387.919",
+              "dur": "2.161",
+              "text": "is the entire transcript in one string."
+            },
+            {
+              "start": "390.080",
+              "dur": "1.760",
+              "text": "So that's exactly what we wanted. But"
+            },
+            {
+              "start": "391.840",
+              "dur": "1.440",
+              "text": "that's not exactly the information that"
+            },
+            {
+              "start": "393.280",
+              "dur": "2.160",
+              "text": "I wanted to actually vectorize and chunk"
+            },
+            {
+              "start": "395.440",
+              "dur": "2.080",
+              "text": "up because just like we saw in that"
+            },
+            {
+              "start": "397.520",
+              "dur": "2.799",
+              "text": "visualization, we then wouldn't know the"
+            },
+            {
+              "start": "400.319",
+              "dur": "2.641",
+              "text": "timestamps of every area that got"
+            },
+            {
+              "start": "402.960",
+              "dur": "2.239",
+              "text": "chunked up. So what I decided to do was"
+            },
+            {
+              "start": "405.199",
+              "dur": "1.921",
+              "text": "another code node and this time I wanted"
+            },
+            {
+              "start": "407.120",
+              "dur": "2.079",
+              "text": "to actually split it up but keep the"
+            },
+            {
+              "start": "409.199",
+              "dur": "3.201",
+              "text": "timestamps relative to each chunk of"
+            },
+            {
+              "start": "412.400",
+              "dur": "1.600",
+              "text": "transcript. So I did the exact same"
+            },
+            {
+              "start": "414.000",
+              "dur": "1.840",
+              "text": "thing here. I copied the schema. I went"
+            },
+            {
+              "start": "415.840",
+              "dur": "2.400",
+              "text": "into my claude and I basically said what"
+            },
+            {
+              "start": "418.240",
+              "dur": "1.600",
+              "text": "I want to do now is lump together 20"
+            },
+            {
+              "start": "419.840",
+              "dur": "2.639",
+              "text": "data objects at a time and I want the"
+            },
+            {
+              "start": "422.479",
+              "dur": "1.921",
+              "text": "timestamps to actually stay relevant to"
+            },
+            {
+              "start": "424.400",
+              "dur": "2.160",
+              "text": "each chunk. So that may not make a lot"
+            },
+            {
+              "start": "426.560",
+              "dur": "1.199",
+              "text": "of sense. I'd rather just come into here"
+            },
+            {
+              "start": "427.759",
+              "dur": "2.160",
+              "text": "and show you guys what I mean by that."
+            },
+            {
+              "start": "429.919",
+              "dur": "2.961",
+              "text": "So the transcript node outputs different"
+            },
+            {
+              "start": "432.880",
+              "dur": "2.800",
+              "text": "objects called data and each data object"
+            },
+            {
+              "start": "435.680",
+              "dur": "2.160",
+              "text": "has a start time, a duration, and then"
+            },
+            {
+              "start": "437.840",
+              "dur": "2.960",
+              "text": "the actual text in that little object."
+            },
+            {
+              "start": "440.800",
+              "dur": "1.519",
+              "text": "So, what I'm basically telling Claude to"
+            },
+            {
+              "start": "442.319",
+              "dur": "2.320",
+              "text": "do is I want to lump together 20 data"
+            },
+            {
+              "start": "444.639",
+              "dur": "2.161",
+              "text": "objects at a time. And then when I lump"
+            },
+            {
+              "start": "446.800",
+              "dur": "1.760",
+              "text": "together these data objects, I want you"
+            },
+            {
+              "start": "448.560",
+              "dur": "2.320",
+              "text": "to collect and combine all of the text"
+            },
+            {
+              "start": "450.880",
+              "dur": "1.920",
+              "text": "fields together. But in order to keep"
+            },
+            {
+              "start": "452.800",
+              "dur": "2.000",
+              "text": "the time stamp relevant, I want to get"
+            },
+            {
+              "start": "454.800",
+              "dur": "2.399",
+              "text": "the first start time from that first"
+            },
+            {
+              "start": "457.199",
+              "dur": "2.241",
+              "text": "data object. And then from the last one,"
+            },
+            {
+              "start": "459.440",
+              "dur": "1.599",
+              "text": "what I want to do is get the start time"
+            },
+            {
+              "start": "461.039",
+              "dur": "1.841",
+              "text": "plus the duration, which would equal the"
+            },
+            {
+              "start": "462.880",
+              "dur": "1.520",
+              "text": "end time. And then you can see on this"
+            },
+            {
+              "start": "464.400",
+              "dur": "2.160",
+              "text": "right hand side, we get 25 different"
+            },
+            {
+              "start": "466.560",
+              "dur": "2.960",
+              "text": "chunks of transcript. And each chunk has"
+            },
+            {
+              "start": "469.520",
+              "dur": "2.480",
+              "text": "a formatted start time and a formatted"
+            },
+            {
+              "start": "472.000",
+              "dur": "1.919",
+              "text": "end time. So this is why we're getting"
+            },
+            {
+              "start": "473.919",
+              "dur": "2.881",
+              "text": "our nice chunks to vectorize that have"
+            },
+            {
+              "start": "476.800",
+              "dur": "2.160",
+              "text": "our actual timestamps with them. So that"
+            },
+            {
+              "start": "478.960",
+              "dur": "1.519",
+              "text": "worked beautifully. I'm now merging it"
+            },
+            {
+              "start": "480.479",
+              "dur": "1.201",
+              "text": "all together and then we're setting it"
+            },
+            {
+              "start": "481.680",
+              "dur": "2.000",
+              "text": "into subbase. And the only really thing"
+            },
+            {
+              "start": "483.680",
+              "dur": "2.000",
+              "text": "that's special going on here is in the"
+            },
+            {
+              "start": "485.680",
+              "dur": "1.440",
+              "text": "default data loader. This is where we're"
+            },
+            {
+              "start": "487.120",
+              "dur": "1.680",
+              "text": "telling it what data to vectorize. And"
+            },
+            {
+              "start": "488.800",
+              "dur": "1.440",
+              "text": "this is also where we're giving it the"
+            },
+            {
+              "start": "490.240",
+              "dur": "2.399",
+              "text": "three metadata fields. Video title,"
+            },
+            {
+              "start": "492.639",
+              "dur": "2.161",
+              "text": "timestamp, and video URL. So the first"
+            },
+            {
+              "start": "494.800",
+              "dur": "2.239",
+              "text": "thing is the data to actually vectorize."
+            },
+            {
+              "start": "497.039",
+              "dur": "2.401",
+              "text": "I didn't want to do all input data. We"
+            },
+            {
+              "start": "499.440",
+              "dur": "2.000",
+              "text": "wanted to load very specific data which"
+            },
+            {
+              "start": "501.440",
+              "dur": "2.159",
+              "text": "would just be the text that actually got"
+            },
+            {
+              "start": "503.599",
+              "dur": "2.081",
+              "text": "split up with timestamps. We didn't want"
+            },
+            {
+              "start": "505.680",
+              "dur": "2.400",
+              "text": "to vectorize the entire combined text."
+            },
+            {
+              "start": "508.080",
+              "dur": "1.440",
+              "text": "So then for each of these chunks, we"
+            },
+            {
+              "start": "509.520",
+              "dur": "1.440",
+              "text": "wanted to give the metadata. So for"
+            },
+            {
+              "start": "510.960",
+              "dur": "1.840",
+              "text": "video title, I just went to the form"
+            },
+            {
+              "start": "512.800",
+              "dur": "1.440",
+              "text": "submission and I dragged in the video"
+            },
+            {
+              "start": "514.240",
+              "dur": "2.239",
+              "text": "title. For the video URL, I did the same"
+            },
+            {
+              "start": "516.479",
+              "dur": "1.201",
+              "text": "thing from here. Dragged in the video"
+            },
+            {
+              "start": "517.680",
+              "dur": "1.919",
+              "text": "URL. But then for time stamp, what I had"
+            },
+            {
+              "start": "519.599",
+              "dur": "1.521",
+              "text": "to do was just go to our merge node"
+            },
+            {
+              "start": "521.120",
+              "dur": "1.279",
+              "text": "where we pulled it all together. And"
+            },
+            {
+              "start": "522.399",
+              "dur": "1.361",
+              "text": "then I wanted to pull in the formatted"
+            },
+            {
+              "start": "523.760",
+              "dur": "1.600",
+              "text": "start time. And then I manually put a"
+            },
+            {
+              "start": "525.360",
+              "dur": "2.080",
+              "text": "dash. And then I pulled in the formatted"
+            },
+            {
+              "start": "527.440",
+              "dur": "1.600",
+              "text": "end time. So now we're getting like a"
+            },
+            {
+              "start": "529.040",
+              "dur": "2.160",
+              "text": "range of 40 seconds for each of our"
+            },
+            {
+              "start": "531.200",
+              "dur": "1.440",
+              "text": "chunks. And now that we have everything"
+            },
+            {
+              "start": "532.640",
+              "dur": "1.840",
+              "text": "in our vector database and enriched,"
+            },
+            {
+              "start": "534.480",
+              "dur": "1.520",
+              "text": "we're writing it into our Google sheet."
+            },
+            {
+              "start": "536.000",
+              "dur": "1.600",
+              "text": "So we can now see once again, here are"
+            },
+            {
+              "start": "537.600",
+              "dur": "1.600",
+              "text": "the videos that exist in our vector"
+            },
+            {
+              "start": "539.000",
+              "dur": "63.000"
+            },
+            {
+              "start": "539.200",
+              "dur": "1.520",
+              "text": "database. And by the way, if you guys"
+            },
+            {
+              "start": "540.720",
+              "dur": "1.200",
+              "text": "want to get a better feel for it and"
+            },
+            {
+              "start": "541.920",
+              "dur": "1.440",
+              "text": "download this workflow, you can do so"
+            },
+            {
+              "start": "543.360",
+              "dur": "1.760",
+              "text": "for free. You just have to join my free"
+            },
+            {
+              "start": "545.120",
+              "dur": "1.279",
+              "text": "school community. The link for that will"
+            },
+            {
+              "start": "546.399",
+              "dur": "1.361",
+              "text": "be down in the description. You'll then"
+            },
+            {
+              "start": "547.760",
+              "dur": "1.680",
+              "text": "search for the title of this video or"
+            },
+            {
+              "start": "549.440",
+              "dur": "1.760",
+              "text": "you can click on YouTube resources and"
+            },
+            {
+              "start": "551.200",
+              "dur": "2.240",
+              "text": "then the post associated with this video"
+            },
+            {
+              "start": "553.440",
+              "dur": "1.680",
+              "text": "will have the workflow right here to"
+            },
+            {
+              "start": "555.120",
+              "dur": "1.680",
+              "text": "download. There will also be a link"
+            },
+            {
+              "start": "556.800",
+              "dur": "1.680",
+              "text": "right here to this Google sheet template"
+            },
+            {
+              "start": "558.480",
+              "dur": "1.440",
+              "text": "if you want to just import the exact"
+            },
+            {
+              "start": "559.920",
+              "dur": "1.440",
+              "text": "same one so you don't have to set up"
+            },
+            {
+              "start": "561.360",
+              "dur": "1.919",
+              "text": "anything else. Okay, cool. So now what"
+            },
+            {
+              "start": "563.279",
+              "dur": "1.921",
+              "text": "we can do is chat with our agent and see"
+            },
+            {
+              "start": "565.200",
+              "dur": "2.000",
+              "text": "if it actually can access that new"
+            },
+            {
+              "start": "567.200",
+              "dur": "1.520",
+              "text": "video. So I'm going to send off this"
+            },
+            {
+              "start": "568.720",
+              "dur": "2.080",
+              "text": "query that asks what does anthropics"
+            },
+            {
+              "start": "570.800",
+              "dur": "2.000",
+              "text": "team say about building agents"
+            },
+            {
+              "start": "572.800",
+              "dur": "1.760",
+              "text": "effectively. We'll see it look through"
+            },
+            {
+              "start": "574.560",
+              "dur": "2.800",
+              "text": "Subbase and hopefully it's able to pull"
+            },
+            {
+              "start": "577.360",
+              "dur": "1.680",
+              "text": "insights from that new video that we"
+            },
+            {
+              "start": "579.040",
+              "dur": "2.799",
+              "text": "just put into our database. So, it just"
+            },
+            {
+              "start": "581.839",
+              "dur": "1.440",
+              "text": "responded. Enthropics team shares"
+            },
+            {
+              "start": "583.279",
+              "dur": "1.601",
+              "text": "several insights about building agents"
+            },
+            {
+              "start": "584.880",
+              "dur": "1.920",
+              "text": "effectively. Here's the first tip from"
+            },
+            {
+              "start": "586.800",
+              "dur": "2.400",
+              "text": "this video from the time stamp 12 to 42"
+            },
+            {
+              "start": "589.200",
+              "dur": "2.000",
+              "text": "with our YouTube video link. You can see"
+            },
+            {
+              "start": "591.200",
+              "dur": "1.600",
+              "text": "we get some more insights down here and"
+            },
+            {
+              "start": "592.800",
+              "dur": "1.760",
+              "text": "this is from way later in that video."
+            },
+            {
+              "start": "594.560",
+              "dur": "2.480",
+              "text": "So, 1745 to 1816. And then, of course,"
+            },
+            {
+              "start": "597.040",
+              "dur": "1.520",
+              "text": "it gives us a few more points, but you"
+            },
+            {
+              "start": "598.560",
+              "dur": "1.200",
+              "text": "can see it's pulling from the right"
+            },
+            {
+              "start": "599.760",
+              "dur": "1.840",
+              "text": "video and it's also showing us exactly"
+            },
+            {
+              "start": "601.600",
+              "dur": "1.359",
+              "text": "where it got that data. All right. All"
+            },
+            {
+              "start": "602.000",
+              "dur": "112.000"
+            },
+            {
+              "start": "602.959",
+              "dur": "1.121",
+              "text": "right. So, now that you guys have seen"
+            },
+            {
+              "start": "604.080",
+              "dur": "1.680",
+              "text": "how that works, before we get to the"
+            },
+            {
+              "start": "605.760",
+              "dur": "1.360",
+              "text": "pipeline down here to actually"
+            },
+            {
+              "start": "607.120",
+              "dur": "2.480",
+              "text": "automatically delete transcripts from"
+            },
+            {
+              "start": "609.600",
+              "dur": "2.000",
+              "text": "our vector database, I wanted to talk"
+            },
+            {
+              "start": "611.600",
+              "dur": "1.919",
+              "text": "about now that we have two YouTube"
+            },
+            {
+              "start": "613.519",
+              "dur": "2.081",
+              "text": "videos in our vector database. What if"
+            },
+            {
+              "start": "615.600",
+              "dur": "1.840",
+              "text": "we wanted to make a search and say, I"
+            },
+            {
+              "start": "617.440",
+              "dur": "1.760",
+              "text": "only want you to look through this one"
+            },
+            {
+              "start": "619.200",
+              "dur": "1.840",
+              "text": "video. Well, this is where we would use"
+            },
+            {
+              "start": "621.040",
+              "dur": "1.440",
+              "text": "metadata filtering because we can"
+            },
+            {
+              "start": "622.480",
+              "dur": "1.680",
+              "text": "literally say, search through our vector"
+            },
+            {
+              "start": "624.160",
+              "dur": "2.640",
+              "text": "database for this, but only pull back"
+            },
+            {
+              "start": "626.800",
+              "dur": "2.560",
+              "text": "rows where the video title equals this."
+            },
+            {
+              "start": "629.360",
+              "dur": "1.520",
+              "text": "So, in order to do that, I have a"
+            },
+            {
+              "start": "630.880",
+              "dur": "1.519",
+              "text": "different setup over here, which is our"
+            },
+            {
+              "start": "632.399",
+              "dur": "2.000",
+              "text": "rag agent with a form submission in"
+            },
+            {
+              "start": "634.399",
+              "dur": "1.521",
+              "text": "order to do the metadata filtering. So,"
+            },
+            {
+              "start": "635.920",
+              "dur": "1.120",
+              "text": "we talked to this one through a form"
+            },
+            {
+              "start": "637.040",
+              "dur": "1.200",
+              "text": "submission. I'm going to open up the"
+            },
+            {
+              "start": "638.240",
+              "dur": "2.080",
+              "text": "form right here, and it's going to ask"
+            },
+            {
+              "start": "640.320",
+              "dur": "2.000",
+              "text": "us for a YouTube video to look through,"
+            },
+            {
+              "start": "642.320",
+              "dur": "1.759",
+              "text": "and then we can give it a query. So, I'm"
+            },
+            {
+              "start": "644.079",
+              "dur": "1.200",
+              "text": "saying that I only want to look through"
+            },
+            {
+              "start": "645.279",
+              "dur": "1.841",
+              "text": "that tips for building AI agents video"
+            },
+            {
+              "start": "647.120",
+              "dur": "2.080",
+              "text": "by anthropic. And I just want three key"
+            },
+            {
+              "start": "649.200",
+              "dur": "1.920",
+              "text": "takeaways. So, I'll send that off. Our"
+            },
+            {
+              "start": "651.120",
+              "dur": "1.600",
+              "text": "agent's going to take that search"
+            },
+            {
+              "start": "652.720",
+              "dur": "2.799",
+              "text": "through Superbase only for chunks where"
+            },
+            {
+              "start": "655.519",
+              "dur": "2.401",
+              "text": "video title equals what we just put in"
+            },
+            {
+              "start": "657.920",
+              "dur": "1.280",
+              "text": "there. and then it's going to give us an"
+            },
+            {
+              "start": "659.200",
+              "dur": "1.280",
+              "text": "answer. And also, this one isn't going"
+            },
+            {
+              "start": "660.480",
+              "dur": "1.680",
+              "text": "to answer in the chat because we talked"
+            },
+            {
+              "start": "662.160",
+              "dur": "1.520",
+              "text": "to it through a form submission. So, I"
+            },
+            {
+              "start": "663.680",
+              "dur": "1.120",
+              "text": "just have to click into the agent to"
+            },
+            {
+              "start": "664.800",
+              "dur": "1.599",
+              "text": "read the answer. So, here we go. Here"
+            },
+            {
+              "start": "666.399",
+              "dur": "1.601",
+              "text": "are three key takeaways from the video."
+            },
+            {
+              "start": "668.000",
+              "dur": "1.760",
+              "text": "Tips for building AI agents. The first"
+            },
+            {
+              "start": "669.760",
+              "dur": "1.280",
+              "text": "one is when building agents, it's"
+            },
+            {
+              "start": "671.040",
+              "dur": "1.520",
+              "text": "important to design your product so that"
+            },
+            {
+              "start": "672.560",
+              "dur": "2.000",
+              "text": "as the AI models improve, your product"
+            },
+            {
+              "start": "674.560",
+              "dur": "1.920",
+              "text": "improves as well. The second tip is"
+            },
+            {
+              "start": "676.480",
+              "dur": "2.080",
+              "text": "about developers and it comes from 517"
+            },
+            {
+              "start": "678.560",
+              "dur": "1.760",
+              "text": "in that video. And then the last tip"
+            },
+            {
+              "start": "680.320",
+              "dur": "1.440",
+              "text": "comes from that same video, of course,"
+            },
+            {
+              "start": "681.760",
+              "dur": "2.079",
+              "text": "and from the 12second mark. So, just"
+            },
+            {
+              "start": "683.839",
+              "dur": "1.921",
+              "text": "remember this isn't perfect. And if you"
+            },
+            {
+              "start": "685.760",
+              "dur": "1.680",
+              "text": "really did want like three key takeaways"
+            },
+            {
+              "start": "687.440",
+              "dur": "2.079",
+              "text": "or a big summary, you probably wouldn't"
+            },
+            {
+              "start": "689.519",
+              "dur": "3.361",
+              "text": "want to take a vector search approach"
+            },
+            {
+              "start": "692.880",
+              "dur": "1.600",
+              "text": "because the chunks still don't have"
+            },
+            {
+              "start": "694.480",
+              "dur": "2.000",
+              "text": "holistic context of all the chunks"
+            },
+            {
+              "start": "696.480",
+              "dur": "1.440",
+              "text": "combined. But the point I was trying to"
+            },
+            {
+              "start": "697.920",
+              "dur": "1.200",
+              "text": "make here is this is how you can"
+            },
+            {
+              "start": "699.120",
+              "dur": "1.760",
+              "text": "actually control which chunks you're"
+            },
+            {
+              "start": "700.880",
+              "dur": "1.760",
+              "text": "looking through. Because in this subbase"
+            },
+            {
+              "start": "702.640",
+              "dur": "2.000",
+              "text": "vector store node, we have a metadata"
+            },
+            {
+              "start": "704.640",
+              "dur": "1.759",
+              "text": "filter. And this is where we're saying"
+            },
+            {
+              "start": "706.399",
+              "dur": "2.241",
+              "text": "only pull back chunks if video title"
+            },
+            {
+              "start": "708.640",
+              "dur": "2.560",
+              "text": "equals this dynamic input, which in our"
+            },
+            {
+              "start": "711.200",
+              "dur": "1.920",
+              "text": "case is whatever we entered in that form"
+            },
+            {
+              "start": "713.120",
+              "dur": "1.440",
+              "text": "submission. All right. And then the"
+            },
+            {
+              "start": "714.000",
+              "dur": "121.000"
+            },
+            {
+              "start": "714.560",
+              "dur": "1.440",
+              "text": "final part is we have this little"
+            },
+            {
+              "start": "716.000",
+              "dur": "1.760",
+              "text": "pipeline to delete things if we don't"
+            },
+            {
+              "start": "717.760",
+              "dur": "1.280",
+              "text": "want them in our vector database"
+            },
+            {
+              "start": "719.040",
+              "dur": "2.320",
+              "text": "anymore. So let's say we're tired of"
+            },
+            {
+              "start": "721.360",
+              "dur": "2.080",
+              "text": "chatting with this YouTube video from"
+            },
+            {
+              "start": "723.440",
+              "dur": "1.680",
+              "text": "Nate and we want to get it out of our"
+            },
+            {
+              "start": "725.120",
+              "dur": "1.920",
+              "text": "vector database. All we would do is we'd"
+            },
+            {
+              "start": "727.040",
+              "dur": "1.280",
+              "text": "come in here and we would change the"
+            },
+            {
+              "start": "728.320",
+              "dur": "2.240",
+              "text": "status to remove. And then this workflow"
+            },
+            {
+              "start": "730.560",
+              "dur": "1.920",
+              "text": "is going to fire off if it's an active"
+            },
+            {
+              "start": "732.480",
+              "dur": "2.000",
+              "text": "workflow because we updated a row. It's"
+            },
+            {
+              "start": "734.480",
+              "dur": "1.120",
+              "text": "going to make sure it's only going to"
+            },
+            {
+              "start": "735.600",
+              "dur": "1.760",
+              "text": "process rows where the status equals"
+            },
+            {
+              "start": "737.360",
+              "dur": "1.360",
+              "text": "remove. So, let me just fire this off"
+            },
+            {
+              "start": "738.720",
+              "dur": "1.440",
+              "text": "and show you guys. And then we set up"
+            },
+            {
+              "start": "740.160",
+              "dur": "1.840",
+              "text": "the loop just in case you go in there"
+            },
+            {
+              "start": "742.000",
+              "dur": "2.480",
+              "text": "and you mark off like five as it'll go"
+            },
+            {
+              "start": "744.480",
+              "dur": "2.640",
+              "text": "ahead and process all five. So, you can"
+            },
+            {
+              "start": "747.120",
+              "dur": "1.200",
+              "text": "see that was really quick. It already"
+            },
+            {
+              "start": "748.320",
+              "dur": "1.680",
+              "text": "finished up. And if I go to that Google"
+            },
+            {
+              "start": "750.000",
+              "dur": "2.079",
+              "text": "sheet, you can see that this now is"
+            },
+            {
+              "start": "752.079",
+              "dur": "2.560",
+              "text": "marked as removed. And if I go to our"
+            },
+            {
+              "start": "754.639",
+              "dur": "1.841",
+              "text": "vector database and we refresh this"
+            },
+            {
+              "start": "756.480",
+              "dur": "2.240",
+              "text": "thing, we should see that this first"
+            },
+            {
+              "start": "758.720",
+              "dur": "2.799",
+              "text": "chunk in here will not have the YouTube"
+            },
+            {
+              "start": "761.519",
+              "dur": "2.241",
+              "text": "title of everything I learned about"
+            },
+            {
+              "start": "763.760",
+              "dur": "1.440",
+              "text": "building agents, that video that just"
+            },
+            {
+              "start": "765.200",
+              "dur": "2.079",
+              "text": "deleted. So now our vector database is"
+            },
+            {
+              "start": "767.279",
+              "dur": "1.761",
+              "text": "up to date. So just to show you guys how"
+            },
+            {
+              "start": "769.040",
+              "dur": "1.840",
+              "text": "this works, the trigger goes off when a"
+            },
+            {
+              "start": "770.880",
+              "dur": "1.280",
+              "text": "row is updated, but it's still going to"
+            },
+            {
+              "start": "772.160",
+              "dur": "1.919",
+              "text": "pull in everything on that sheet. So"
+            },
+            {
+              "start": "774.079",
+              "dur": "2.000",
+              "text": "then what we do is we move into a filter"
+            },
+            {
+              "start": "776.079",
+              "dur": "2.721",
+              "text": "and we just say if the status column"
+            },
+            {
+              "start": "778.800",
+              "dur": "1.599",
+              "text": "equals remove, then we're going to keep"
+            },
+            {
+              "start": "780.399",
+              "dur": "1.841",
+              "text": "it. And that's why it kept this video,"
+            },
+            {
+              "start": "782.240",
+              "dur": "1.680",
+              "text": "but it didn't keep the tips for building"
+            },
+            {
+              "start": "783.920",
+              "dur": "1.599",
+              "text": "AI agents. So, we're only going to"
+            },
+            {
+              "start": "785.519",
+              "dur": "1.601",
+              "text": "actually remove the one that we marked"
+            },
+            {
+              "start": "787.120",
+              "dur": "1.920",
+              "text": "as removed. Then we have the loop. We"
+            },
+            {
+              "start": "789.040",
+              "dur": "1.280",
+              "text": "only have one item in this case, so it"
+            },
+            {
+              "start": "790.320",
+              "dur": "1.440",
+              "text": "doesn't matter. But then we're doing a"
+            },
+            {
+              "start": "791.760",
+              "dur": "2.240",
+              "text": "set just to make sure we set the URL of"
+            },
+            {
+              "start": "794.000",
+              "dur": "1.519",
+              "text": "the video because that's what we're"
+            },
+            {
+              "start": "795.519",
+              "dur": "2.401",
+              "text": "going to use as our metadata filter to"
+            },
+            {
+              "start": "797.920",
+              "dur": "2.560",
+              "text": "delete vectors. So, we have our URL"
+            },
+            {
+              "start": "800.480",
+              "dur": "1.760",
+              "text": "right here of the YouTube video. And"
+            },
+            {
+              "start": "802.240",
+              "dur": "1.680",
+              "text": "then we go into a subbase node where"
+            },
+            {
+              "start": "803.920",
+              "dur": "1.599",
+              "text": "we're going to delete a row. We're"
+            },
+            {
+              "start": "805.519",
+              "dur": "1.440",
+              "text": "deleting it from that table that we had"
+            },
+            {
+              "start": "806.959",
+              "dur": "1.521",
+              "text": "set up. And then we're basically saying"
+            },
+            {
+              "start": "808.480",
+              "dur": "2.640",
+              "text": "only delete rows where in the metadata"
+            },
+            {
+              "start": "811.120",
+              "dur": "3.200",
+              "text": "the field called video URL equals this,"
+            },
+            {
+              "start": "814.320",
+              "dur": "2.319",
+              "text": "which is the dynamic"
+            },
+            {
+              "start": "816.639",
+              "dur": "2.241",
+              "text": "YouTube video URL that we just set. And"
+            },
+            {
+              "start": "818.880",
+              "dur": "1.440",
+              "text": "so it comes back to us and it says,"
+            },
+            {
+              "start": "820.320",
+              "dur": "3.199",
+              "text": "okay, we found 32 vectors where the"
+            },
+            {
+              "start": "823.519",
+              "dur": "2.961",
+              "text": "video URL metadata field equaled this"
+            },
+            {
+              "start": "826.480",
+              "dur": "1.440",
+              "text": "string. And so we're just going to"
+            },
+            {
+              "start": "827.920",
+              "dur": "1.599",
+              "text": "delete them all. It goes ahead and it"
+            },
+            {
+              "start": "829.519",
+              "dur": "2.320",
+              "text": "deletes them. And then we update in our"
+            },
+            {
+              "start": "831.839",
+              "dur": "3.680",
+              "text": "Google sheet that this URL was marked as"
+            },
+            {
+              "start": "835.000",
+              "dur": "42.000"
+            },
+            {
+              "start": "835.519",
+              "dur": "1.921",
+              "text": "removed. So, that's the full system I"
+            },
+            {
+              "start": "837.440",
+              "dur": "1.199",
+              "text": "wanted to share with you guys today. If"
+            },
+            {
+              "start": "838.639",
+              "dur": "1.681",
+              "text": "you download this template for free,"
+            },
+            {
+              "start": "840.320",
+              "dur": "1.120",
+              "text": "you'll be able to play around with all"
+            },
+            {
+              "start": "841.440",
+              "dur": "2.240",
+              "text": "of this and just test it out and see,"
+            },
+            {
+              "start": "843.680",
+              "dur": "1.440",
+              "text": "you know, how could you start to use"
+            },
+            {
+              "start": "845.120",
+              "dur": "2.079",
+              "text": "metadata for your specific use case"
+            },
+            {
+              "start": "847.199",
+              "dur": "0.961",
+              "text": "because it's always going to be"
+            },
+            {
+              "start": "848.160",
+              "dur": "2.640",
+              "text": "different for different types of data."
+            },
+            {
+              "start": "850.800",
+              "dur": "2.240",
+              "text": "But the key really is this rag pipeline"
+            },
+            {
+              "start": "853.040",
+              "dur": "2.400",
+              "text": "right here where you're going to process"
+            },
+            {
+              "start": "855.440",
+              "dur": "1.759",
+              "text": "different types of inputs, but for each"
+            },
+            {
+              "start": "857.199",
+              "dur": "1.760",
+              "text": "input, you should know exactly what you"
+            },
+            {
+              "start": "858.959",
+              "dur": "1.680",
+              "text": "want. So, in this case, I knew whenever"
+            },
+            {
+              "start": "860.639",
+              "dur": "1.601",
+              "text": "I get a transcript, I want the full"
+            },
+            {
+              "start": "862.240",
+              "dur": "1.680",
+              "text": "thing. I want the timestamps and then"
+            },
+            {
+              "start": "863.920",
+              "dur": "2.080",
+              "text": "I'm going to know exactly what fields"
+            },
+            {
+              "start": "866.000",
+              "dur": "1.600",
+              "text": "are going to be metadata. And so once"
+            },
+            {
+              "start": "867.600",
+              "dur": "1.440",
+              "text": "you get that pipeline figured out where"
+            },
+            {
+              "start": "869.040",
+              "dur": "1.599",
+              "text": "you're taking data, you're preparing it,"
+            },
+            {
+              "start": "870.639",
+              "dur": "1.440",
+              "text": "you're standardizing it, everything's"
+            },
+            {
+              "start": "872.079",
+              "dur": "1.841",
+              "text": "predictable, then you can really start"
+            },
+            {
+              "start": "873.920",
+              "dur": "2.479",
+              "text": "to enrich all of this data in a database"
+            },
+            {
+              "start": "876.399",
+              "dur": "1.521",
+              "text": "to pull it back. And if you're looking"
+            },
+            {
+              "start": "877.000",
+              "dur": "37.000"
+            },
+            {
+              "start": "877.920",
+              "dur": "1.279",
+              "text": "to deep dive into some of this stuff and"
+            },
+            {
+              "start": "879.199",
+              "dur": "1.121",
+              "text": "you're looking for a more hands-on"
+            },
+            {
+              "start": "880.320",
+              "dur": "1.600",
+              "text": "experience, then I definitely recommend"
+            },
+            {
+              "start": "881.920",
+              "dur": "1.760",
+              "text": "checking out my paid community. The link"
+            },
+            {
+              "start": "883.680",
+              "dur": "1.120",
+              "text": "for that is also down in the"
+            },
+            {
+              "start": "884.800",
+              "dur": "1.200",
+              "text": "description. We've got a great community"
+            },
+            {
+              "start": "886.000",
+              "dur": "1.600",
+              "text": "of members who are always sharing and"
+            },
+            {
+              "start": "887.600",
+              "dur": "1.760",
+              "text": "building with an end every single day."
+            },
+            {
+              "start": "889.360",
+              "dur": "1.839",
+              "text": "And we have two full courses. One's"
+            },
+            {
+              "start": "891.199",
+              "dur": "1.281",
+              "text": "called Agent Zero, which is the"
+            },
+            {
+              "start": "892.480",
+              "dur": "2.000",
+              "text": "foundations for AI automation. And then"
+            },
+            {
+              "start": "894.480",
+              "dur": "1.599",
+              "text": "we have 10 hours to 10 seconds, where"
+            },
+            {
+              "start": "896.079",
+              "dur": "2.000",
+              "text": "you learn how to identify, design, and"
+            },
+            {
+              "start": "898.079",
+              "dur": "2.320",
+              "text": "build time-saving automations. So, I'd"
+            },
+            {
+              "start": "900.399",
+              "dur": "1.440",
+              "text": "love to see you guys in this community."
+            },
+            {
+              "start": "901.839",
+              "dur": "1.201",
+              "text": "But that's going to do it for this one."
+            },
+            {
+              "start": "903.040",
+              "dur": "1.680",
+              "text": "Hopefully, you all enjoyed or learned"
+            },
+            {
+              "start": "904.720",
+              "dur": "1.679",
+              "text": "something new. If you did, I'd really"
+            },
+            {
+              "start": "906.399",
+              "dur": "1.841",
+              "text": "appreciate a like. Helps me out a ton."
+            },
+            {
+              "start": "908.240",
+              "dur": "1.360",
+              "text": "And as always, I appreciate you guys"
+            },
+            {
+              "start": "909.600",
+              "dur": "1.760",
+              "text": "making it to the end of the video. I'll"
+            },
+            {
+              "start": "911.360",
+              "dur": "1.919",
+              "text": "see you all in the next one. Thanks"
+            },
+            {
+              "start": "913.279",
+              "dur": "2.481",
+              "text": "guys."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get Transcript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Transcript": {
+      "main": [
+        [
+          {
+            "node": "Transcript",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Timestamps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "YouTube RAG Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "ai_tool": [
+        [
+          {
+            "node": "YouTube RAG Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcript": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Timestamps": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a row": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Delete a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT 4.1-mini1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RAG Agent 2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "RAG Agent 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "RAG Agent 2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reranker": {
+      "ai_reranker": [
+        [
+          {
+            "node": "Supabase",
+            "type": "ai_reranker",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "YouTube RAG Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0260dac2-c339-4d6c-9462-4bb2f1f4335a",
+  "meta": {
+    "instanceId": "83cf903f0fb07939d7b28f2155fe2feda785416b374bc4f4f8641e001e971c03"
+  },
+  "id": "xFrNNilCokeWpAQG",
+  "tags": []
+}
