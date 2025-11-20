@@ -1,0 +1,317 @@
+{
+  "name": "Complete RAG Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "19cCndxXZT9kCcH_8oIU22U77y6YWN8sA",
+          "mode": "list",
+          "cachedResultName": "Jinbe Full Story.docx",
+          "cachedResultUrl": "https://docs.google.com/document/d/19cCndxXZT9kCcH_8oIU22U77y6YWN8sA/edit?usp=drivesdk&ouid=111503992318018137190&rtpof=true&sd=true"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "f74dfd82-69bf-44d4-9fcc-2b8cd44bce31",
+      "name": "Download file"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        160
+      ],
+      "id": "2a5ddcd9-12be-432c-ab44-dbb234296b9a",
+      "name": "Embeddings Google Gemini"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        160
+      ],
+      "id": "a332202c-ec85-4d2b-a1f9-4d71923f125a",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -288,
+        400
+      ],
+      "id": "c3211234-d601-499c-92ac-432134a54e73",
+      "name": "When chat message received",
+      "webhookId": "b1d753fd-2769-4244-b777-775260883200"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        400
+      ],
+      "id": "f15c999f-2896-49df-9dbd-0703cab44bca",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        592
+      ],
+      "id": "d92c3324-5c55-4548-913f-28d0463552db",
+      "name": "Cohere Chat Model"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "onepiece",
+          "mode": "list",
+          "cachedResultName": "onepiece"
+        },
+        "options": {
+          "queryName": "match_onepiece"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        -16
+      ],
+      "id": "49fef2ee-30d2-479e-90df-7690c9243251",
+      "name": "Supabase Vector Store (Insert Document)"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Call this tool to look up information related to Onepiece Anime.",
+        "tableName": {
+          "__rl": true,
+          "value": "onepiece",
+          "mode": "list",
+          "cachedResultName": "onepiece"
+        },
+        "options": {
+          "queryName": "match_onepiece"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        592
+      ],
+      "id": "b560186f-3538-4294-9e66-47750f195e25",
+      "name": "Supabase Vector Store (Retrieve Document)"
+    },
+    {
+      "parameters": {
+        "content": "# Data Ingestion Pipeline",
+        "height": 400,
+        "width": 848,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -368,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "cb27369f-34ed-444b-868f-580c74b3fd97",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Data Retrieval Pipeline ",
+        "height": 416,
+        "width": 848,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -368,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "c27e0cd8-e219-4e6e-8c11-6729eb4af81d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        592
+      ],
+      "id": "7735ee81-fd00-4be1-9fe0-1f1b69ac73cb",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "18j_W48yQkS1Ynf6SxzPa5W3fsgd8jmay",
+          "mode": "list",
+          "cachedResultName": "OnePiece",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/18j_W48yQkS1Ynf6SxzPa5W3fsgd8jmay"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -16
+      ],
+      "id": "e4154816-32fc-4eee-899e-c7b0a38753f2",
+      "name": "Google Drive Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store (Insert Document)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store (Insert Document)",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Supabase Vector Store (Retrieve Document)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store (Insert Document)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store (Retrieve Document)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "59251aba-bb24-48ec-81b0-7f5696b57e2c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "83cf903f0fb07939d7b28f2155fe2feda785416b374bc4f4f8641e001e971c03"
+  },
+  "id": "WM9VE8hEM1PhCyOQ",
+  "tags": []
+}
