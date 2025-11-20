@@ -81,6 +81,7 @@ Workflow Name	Description
 - NewsletterAutomation.json	Auto-generates newsletters using OpenAI
 - VoiceCallAgent.json	AI-powered voice assistant workflow
 - YoutubeBlogSummarizer.json	Summarizes videos and blogs using NLP
+  
 **💡 Tech Stack**
 
 - n8n – Workflow automation
