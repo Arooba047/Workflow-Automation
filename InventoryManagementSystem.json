@@ -1,0 +1,1276 @@
+{
+  "name": "InventoryManagementSystem",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "New-Inventory",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2080,
+        304
+      ],
+      "id": "4f2d99c4-c03f-4344-bf71-92c6ae48222d",
+      "name": "Webhook",
+      "webhookId": "74d3de4d-c406-48ea-84b7-dde37aafb811"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1104,
+        304
+      ],
+      "id": "f817838a-ca33-4d62-be38-2e24b5b6562d",
+      "name": "Get row(s) in sheet"
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        304
+      ],
+      "id": "898945c3-cdfd-485f-abf1-192bb01c82d0",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the original text output from Claude\nconst raw = $json.content?.[0]?.text || \"\";\n\n// 1. Find JSON inside the text using regex\nconst match = raw.match(/\\{[\\s\\S]*\\}/);\n\n// 2. If no JSON is found, throw error\nif (!match) {\n  throw new Error(\"No JSON found in the model output\");\n}\n\n// 3. Clean & parse JSON safely\nlet parsed;\ntry {\n  parsed = JSON.parse(match[0]);\n} catch (e) {\n  throw new Error(\"Invalid JSON format: \" + e.message);\n}\n\n// 4. Return parsed object as output for next nodes\nreturn parsed;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1504,
+        304
+      ],
+      "id": "57381b59-c47f-42fc-bacf-3198083d2fad",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9fde30ee-7e3e-4739-901d-f15b6e526ca8",
+              "name": "Item Name",
+              "value": "={{ $('Webhook').item.json.body.data.fields[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "d1dc02b9-cc3b-4c9f-bffc-79b0b336f6fe",
+              "name": "Item Category",
+              "value": "={{ $json.category }}",
+              "type": "string"
+            },
+            {
+              "id": "62a2ec3a-3afc-42da-9a57-dbf016e94c0d",
+              "name": "Stock",
+              "value": "={{ $('Webhook').item.json.body.data.fields[2].value }}",
+              "type": "string"
+            },
+            {
+              "id": "9964446a-03e4-4fd5-824d-18bdd6047cd8",
+              "name": "Min Stock",
+              "value": "={{ $('Webhook').item.json.body.data.fields[3].value }}",
+              "type": "string"
+            },
+            {
+              "id": "01040752-1dfc-41ac-9e77-d50031fa2d93",
+              "name": "Price",
+              "value": "={{ $('Webhook').item.json.body.data.fields[4].value }}",
+              "type": "string"
+            },
+            {
+              "id": "5f4df163-246f-482d-988f-3fff200df9c8",
+              "name": "Created At",
+              "value": "={{ $('Webhook').item.json.body.createdAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1296,
+        304
+      ],
+      "id": "b5775684-7968-4ae2-a78c-327636f7a576",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ \n  $json[\"Item ID\"].replace(\n    /\\d+$/,\n    (n) => String(parseInt(n) + 1).padStart(n.length, \"0\")\n  ) \n}}\n",
+            "Item Name": "={{ $('Edit Fields').item.json['Item Name'] }}",
+            "Category": "={{ $('Edit Fields').item.json['Item Category'] }}",
+            "Stock": "={{ $('Edit Fields').item.json.Stock }}",
+            "Min Stock": "={{ $('Edit Fields').item.json['Min Stock'] }}",
+            "Price": "={{ $('Edit Fields').item.json.Price }}",
+            "Last Updated": "={{ \n  new Date($('Edit Fields').item.json['Created At'])\n    .toLocaleString('en-US', { \n      year: \"numeric\",\n      month: \"2-digit\",\n      day: \"2-digit\",\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n      hour12: true\n    })\n    .replace(',', '')\n}}\n"
+          },
+          "matchingColumns": [
+            "Item ID"
+          ],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Name",
+              "displayName": "Item Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Stock",
+              "displayName": "Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Min Stock",
+              "displayName": "Min Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Updated",
+              "displayName": "Last Updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -640,
+        304
+      ],
+      "id": "93234f86-4026-4cc9-9cba-02ded04b06ee",
+      "name": "Append or update row in sheet"
+    },
+    {
+      "parameters": {
+        "content": "## New Inventory",
+        "height": 288,
+        "width": 2016,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2224,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "b3770c33-b3c5-4395-8230-982a2783ad41",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Update-Inventory",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2096,
+        688
+      ],
+      "id": "d660383f-e69f-44bc-ade1-b4c3fd556718",
+      "name": "Webhook1",
+      "webhookId": "03c7d108-8323-4816-bdcf-d1338e6a88db"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=## Overview\nYou are a Category id classifcation Agent. The user will input an 'id' and you have to classify which category the id belongs to.\n\nHere are the categories:\nElectronics = 376df2ea-5bf5-4228-886f-b347fe8d7b03\nAccessories = b6b83b78-a4a2-40cb-8fc0-6db9ac225e4a\nOffice = 2e489764-8d36-4b35-a473-b372b935d17d\nStationary = 52fbd8ce-4e1b-4a3b-a30c-43318d6d1571\nGrocery = 28c9a1d3-3e85-4814-af66-e6ce6cb50eb9\n\n### Output Format Rules:\n- Output must be EXACTLY a JSON object.\n- Do NOT add backticks, markdown, code blocks, labels, or commentary.\n- Do NOT prefix with \"Here is your output\" or anything similar.\n- Do NOT include extra whitespace around the JSON.\n- ONLY output:\n\n{\n  \"category\": \"CategoryName\"\n}\n",
+              "role": "assistant"
+            },
+            {
+              "content": "=id = {{ $json.body.data.fields[1].value[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        -1856,
+        304
+      ],
+      "id": "6b49c1ac-c6e2-4e10-9c03-294a7f6032f3",
+      "name": "Category Classifier"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=## Overview\nYou are a Category id & Stock Operation classifcation Agent. The user will input an 'id' and operation and you have to classify which category the id & operation belongs to. if none of the category matched for id, then output \"None Mentioned\" inside category variable. or if none of the category matched for operation then output \"None Mentioned\" inside operation variable.\n\nHere are the categories for id:\nElectronics = 376df2ea-5bf5-4228-886f-b347fe8d7b03\nAccessories = b6b83b78-a4a2-40cb-8fc0-6db9ac225e4a\nOffice = 2e489764-8d36-4b35-a473-b372b935d17d\nStationary = 52fbd8ce-4e1b-4a3b-a30c-43318d6d1571\nGrocery = 28c9a1d3-3e85-4814-af66-e6ce6cb50eb9\n\nHere are the categories for operation: \nAdd = 54624c2a-992e-4656-b88b-050901c0509b\nSubtract = 6bb75160-031d-4acd-8832-da0681308c9a\n\n### Output Format Rules:\n- Output must be EXACTLY a JSON object.\n- Do NOT add backticks, markdown, code blocks, labels, or commentary.\n- Do NOT prefix with \"Here is your output\" or anything similar.\n- Do NOT include extra whitespace around the JSON.\n- ONLY output:\n\n{\n  \"category\": \"CategoryName\",\n  \"operation\": \"OperationName\"\n}\n",
+              "role": "assistant"
+            },
+            {
+              "content": "=id = {{ $json.body.data.fields[1].value[0] }}\noperation = {{ $json.body.data.fields[8].value[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        -1904,
+        688
+      ],
+      "id": "3130cd01-87b6-4172-8de2-f05c75384514",
+      "name": "Category Classifier1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the original text output from Claude\nconst raw = $json.content?.[0]?.text || \"\";\n\n// 1. Find JSON inside the text using regex\nconst match = raw.match(/\\{[\\s\\S]*\\}/);\n\n// 2. If no JSON is found, throw error\nif (!match) {\n  throw new Error(\"No JSON found in the model output\");\n}\n\n// 3. Clean & parse JSON safely\nlet parsed;\ntry {\n  parsed = JSON.parse(match[0]);\n} catch (e) {\n  throw new Error(\"Invalid JSON format: \" + e.message);\n}\n\n// 4. Return parsed object as output for next nodes\nreturn parsed;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1552,
+        688
+      ],
+      "id": "d897d4f2-a8e8-4892-8cab-ab98e63f55e5",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96eb768e-dba1-4606-87ed-09ba67ba6496",
+              "name": "Item ID",
+              "value": "={{ $('Webhook1').item.json.body.data.fields[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "ab54f33f-f433-459a-ac4a-ae12668139b0",
+              "name": "Item Name",
+              "value": "={{ $('Webhook1').item.json.body.data.fields[1].value }}",
+              "type": "string"
+            },
+            {
+              "id": "036a2222-5fbf-407d-8cd2-92659d28e465",
+              "name": "Item Category",
+              "value": "={{ $json.category }}",
+              "type": "string"
+            },
+            {
+              "id": "c85155db-e345-4da3-ae66-814f6aae3acc",
+              "name": "Operation ",
+              "value": "={{ $json.operation }}",
+              "type": "string"
+            },
+            {
+              "id": "ef9a87c6-ca15-4929-96e3-8eb6fff6f589",
+              "name": "Stock",
+              "value": "={{ $('Webhook1').item.json.body.data.fields[9].value }}",
+              "type": "string"
+            },
+            {
+              "id": "d594e0ae-27c0-42d0-a54e-4cdd85c1f4db",
+              "name": "Min Stock",
+              "value": "={{ $('Webhook1').item.json.body.data.fields[10].value }}",
+              "type": "string"
+            },
+            {
+              "id": "0ec1b9b3-6bcd-4701-a7e8-d4f1d8112b28",
+              "name": "Price",
+              "value": "={{ $('Webhook1').item.json.body.data.fields[11].value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1360,
+        688
+      ],
+      "id": "ef39ea0a-ad1e-4514-980f-b8bdeb5869d8",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const cleaned = Object.fromEntries(\n    Object.entries(item.json).filter(([key, value]) =>\n      value !== null &&\n      value !== undefined &&\n      value !== \"None Mentioned\"\n    )\n  );\n\n  return { json: cleaned };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1152,
+        688
+      ],
+      "id": "daf525ce-c78a-4c9a-90e1-6828cb3b8d5f",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8d04c7f9-bf4c-46aa-81b3-c77462dea430",
+              "leftValue": "={{ $json['Operation '] }}",
+              "rightValue": "Add",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -944,
+        688
+      ],
+      "id": "a204d4c3-6ed7-4cc5-ba3a-30b5624771d4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ $json['Item ID'] }}",
+            "Stock": "={{ Number($node[\"Get row(s) in sheet1\"].json[\"Stock\"]) +  Number($node[\"If\"].json[\"Stock\"])}}\n",
+            "Last Updated": "={{$now.toLocaleString('en-US', { \n      year: \"numeric\",\n      month: \"2-digit\",\n      day: \"2-digit\",\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n      hour12: true\n    })\n    .replace(',', '')}}"
+          },
+          "matchingColumns": [
+            "Item ID"
+          ],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Name",
+              "displayName": "Item Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Stock",
+              "displayName": "Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Min Stock",
+              "displayName": "Min Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Updated",
+              "displayName": "Last Updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -416,
+        544
+      ],
+      "id": "b1bedeea-d2d5-403c-b0df-8efe44513c8f",
+      "name": "Update row in sheet"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Item ID",
+              "lookupValue": "={{ $json['Item ID'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -656,
+        544
+      ],
+      "id": "d92d2755-5339-4c15-956e-e4cf0a34795a",
+      "name": "Get row(s) in sheet1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Item ID",
+              "lookupValue": "={{ $json['Item ID'] }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -656,
+        800
+      ],
+      "id": "8b6422c3-a189-4f85-8dd1-496141fb7795",
+      "name": "Get row(s) in sheet2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ $json['Item ID'] }}",
+            "Stock": "={{ Number($node[\"Get row(s) in sheet2\"].json[\"Stock\"]) -  Number($node[\"If\"].json[\"Stock\"])}}\n",
+            "Last Updated": "={{$now.toLocaleString('en-US', { \n      year: \"numeric\",\n      month: \"2-digit\",\n      day: \"2-digit\",\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n      hour12: true\n    })\n    .replace(',', '')}}"
+          },
+          "matchingColumns": [
+            "Item ID"
+          ],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Name",
+              "displayName": "Item Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Stock",
+              "displayName": "Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Min Stock",
+              "displayName": "Min Stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Updated",
+              "displayName": "Last Updated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -416,
+        800
+      ],
+      "id": "99c8ba08-809b-4aa6-af75-66438c1aab32",
+      "name": "Update row in sheet1"
+    },
+    {
+      "parameters": {
+        "content": "## Update Inventory",
+        "height": 464,
+        "width": 2016,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2224,
+        528
+      ],
+      "typeVersion": 1,
+      "id": "5f26b105-2532-43cd-bb43-5a87e524a67d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2160,
+        1104
+      ],
+      "id": "26fc4fd1-be5b-405c-aa63-109d798ef102",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1952,
+        1104
+      ],
+      "id": "3382dbf9-2ba1-48c5-9e4d-a71597cc89be",
+      "name": "Get row(s) in sheet3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4338884b-6131-4d51-814b-9f0b2f8ee81e",
+              "leftValue": "={{ $json.Stock }}",
+              "rightValue": "={{ $json['Min Stock'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1520,
+        1200
+      ],
+      "id": "0b743511-b2e8-485f-8598-42b9abc528cc",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1744,
+        1104
+      ],
+      "id": "63ab9cac-8f0a-4dcb-8273-6b586bf03c30",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "sendTo": "arooba.iqbal@provelopers.net",
+        "subject": "Low Stock Alert",
+        "message": "=Item ID: {{ $json['Item ID'] }} \nItem Name: {{ $json['Item Name'] }}\nIs Low On Stock.\nCurrent Stock: {{ $json.Stock }}\n\nRe-Stock it ASAP!!!",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1328,
+        1088
+      ],
+      "id": "4cfa924b-5937-4288-ad8b-68c88d9d5f35",
+      "name": "Send a message",
+      "webhookId": "acfb424a-3938-4d1e-92e7-cdab6fba0ad9"
+    },
+    {
+      "parameters": {
+        "content": "## Low Stock Alert",
+        "height": 400,
+        "width": 1104
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2224,
+        1024
+      ],
+      "typeVersion": 1,
+      "id": "834f7dce-c88d-4ad0-8448-ad49e48b0527",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1024,
+        1168
+      ],
+      "id": "b1930a22-8584-4305-a554-c938821c2fd5",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME",
+          "mode": "list",
+          "cachedResultName": "InventoryDB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1t1Wp1auMqiYGpihJhOGd00sI7bjIHCvqcjl0y8-iCME/edit#gid=0"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRange"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -816,
+        1168
+      ],
+      "id": "186d7620-a730-4887-ba0f-7f0e758dcc93",
+      "name": "Get row(s) in sheet4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nlet html = `\n<h2>📦 Daily Inventory Report</h2>\n<p>Generated: ${new Date().toLocaleString()}</p>\n\n<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\" style=\"border-collapse: collapse; width: 100%;\">\n  <tr style=\"background:#f2f2f2;\">\n    <th>Item ID</th>\n    <th>Item Name</th>\n    <th>Category</th>\n    <th>Stock</th>\n    <th>Min Stock</th>\n    <th>Price</th>\n  </tr>\n`;\n\nfor (const r of rows) {\n  html += `\n  <tr>\n    <td>${r.json[\"Item ID\"]}</td>\n    <td>${r.json[\"Item Name\"]}</td>\n    <td>${r.json[\"Category\"]}</td>\n    <td>${r.json[\"Stock\"]}</td>\n    <td>${r.json[\"Min Stock\"]}</td>\n    <td>${r.json[\"Price\"]}</td>\n  </tr>`;\n}\n\nhtml += `</table>`;\n\nreturn [{ json: { htmlReport: html }}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        1168
+      ],
+      "id": "55888079-b229-41ae-9bf6-ea874e6c4500",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "sendTo": "arooba.iqbal@provelopers.net",
+        "subject": "=Daily Inventory Report {{$now .toLocaleString('en-US', { \n      year: \"numeric\",\n      month: \"2-digit\", })\n    .replace(',', '')}}",
+        "message": "={{ $json.htmlReport }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -416,
+        1168
+      ],
+      "id": "817b4bdf-6695-4187-ba69-6a9e9405de22",
+      "name": "Send a message1",
+      "webhookId": "0da910ba-cefc-4260-8e0c-c4f299221f69"
+    },
+    {
+      "parameters": {
+        "content": "## Daily Inventory Report",
+        "height": 400,
+        "width": 880,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1088,
+        1024
+      ],
+      "typeVersion": 1,
+      "id": "2daac66a-2167-4f8b-8743-fad2fa0daeb1",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Category Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category Classifier": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Category Classifier1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category Classifier1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "216f22d7-5226-4ced-bbda-c71caa1f6b43",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "83cf903f0fb07939d7b28f2155fe2feda785416b374bc4f4f8641e001e971c03"
+  },
+  "id": "snEFo9xhtvVU71HL",
+  "tags": []
+}
