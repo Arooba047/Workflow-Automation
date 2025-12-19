@@ -1,0 +1,4910 @@
+{
+  "name": "LeadQualificationAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "formId": "i9Wt5dEK"
+      },
+      "type": "n8n-nodes-base.typeformTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        -336
+      ],
+      "id": "13b20cc6-68ab-4323-bfc5-048eb93360ad",
+      "name": "Typeform Trigger",
+      "webhookId": "f4583032-47c4-4006-bb85-8c9d5576c595"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appt5LwKUxqWPpaHu",
+          "mode": "list",
+          "cachedResultName": "LeadsQualification CRM",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbllGfHnK0HZvbzqe",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu/tbllGfHnK0HZvbzqe"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "LeadID": "={{Math.floor(100000 + Math.random() * 900000)}}\n",
+            "Name": "={{ $json['Your Full Name'] }}",
+            "Email": "={{ $json['What\\'s your email address?'] }}",
+            "Company": "={{ $json['Which company do you work for?'] }}",
+            "Website": "={{ $json['What is your company\\'s website?'] }}",
+            "Role": "={{ $json['What is your role?'] }}",
+            "AnnualRevenue": "={{ $json['What is your estimated annual revenue?'] }}",
+            "Industry": "={{ $json['Which industry best describes your company?'] }}",
+            "Source": "={{ $json['How did you hear about us?'] }}",
+            "Message": "={{ $json['Is there anything else you\\'d like to share with us?'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "LeadID",
+              "displayName": "LeadID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "CEO",
+                  "value": "CEO"
+                },
+                {
+                  "name": "Founder",
+                  "value": "Founder"
+                },
+                {
+                  "name": "CTO",
+                  "value": "CTO"
+                },
+                {
+                  "name": "Marketing",
+                  "value": "Marketing"
+                },
+                {
+                  "name": "Sales",
+                  "value": "Sales"
+                },
+                {
+                  "name": "Product",
+                  "value": "Product"
+                },
+                {
+                  "name": "Operations",
+                  "value": "Operations"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AnnualRevenue",
+              "displayName": "AnnualRevenue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Technology",
+                  "value": "Technology"
+                },
+                {
+                  "name": "Finance",
+                  "value": "Finance"
+                },
+                {
+                  "name": "Healthcare",
+                  "value": "Healthcare"
+                },
+                {
+                  "name": "Education",
+                  "value": "Education"
+                },
+                {
+                  "name": "Retail",
+                  "value": "Retail"
+                },
+                {
+                  "name": "Manufacturing",
+                  "value": "Manufacturing"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Form",
+                  "value": "Form"
+                },
+                {
+                  "name": "Ads",
+                  "value": "Ads"
+                },
+                {
+                  "name": "Referral",
+                  "value": "Referral"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Enrichment",
+              "displayName": "Enrichment",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "QualificationScore",
+              "displayName": "QualificationScore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "QualificationTier",
+              "displayName": "QualificationTier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unqualified",
+                  "value": "Unqualified"
+                },
+                {
+                  "name": "Nurture",
+                  "value": "Nurture"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "High Potential",
+                  "value": "High Potential"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "LastAction",
+              "displayName": "LastAction",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tags",
+              "displayName": "Tags",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "options": [
+                {
+                  "name": "Urgent",
+                  "value": "Urgent"
+                },
+                {
+                  "name": "Follow Up",
+                  "value": "Follow Up"
+                },
+                {
+                  "name": "Cold",
+                  "value": "Cold"
+                },
+                {
+                  "name": "Warm",
+                  "value": "Warm"
+                },
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed",
+              "displayName": "Processed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AssignedTo",
+              "displayName": "AssignedTo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -160
+      ],
+      "id": "4bb307c0-bd4f-47f4-83cf-4c5bd61340b4",
+      "name": "Create a record"
+    },
+    {
+      "parameters": {
+        "content": "## Lead Capturing",
+        "height": 480,
+        "width": 432,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "6ca3c480-cc3a-4b05-a6aa-f114d4864e90",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        96,
+        -352
+      ],
+      "id": "1a9881db-3cbd-4b62-92b8-56d55f78f01f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        -352
+      ],
+      "id": "3804c081-331a-45ac-ad0c-c9d9b2e2ae57",
+      "name": "Get Pages"
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "operation": "getAll",
+        "blockId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        -352
+      ],
+      "id": "e7f0fca7-d488-4ece-9cb2-fbf13a92df35",
+      "name": "Get Content Inside Pages"
+    },
+    {
+      "parameters": {
+        "jsCode": "let extractedText = [];\n\nfor (const item of items) {\n  const block = item.json;\n\n  if (!block.type) continue;\n\n  switch (block.type) {\n\n    case \"paragraph\":\n      if (block.content) {\n        extractedText.push(block.content);\n      }\n      break;\n\n    case \"bulleted_list_item\":\n      if (block.content) {\n        extractedText.push(`- ${block.content}`);\n      }\n      break;\n\n    case \"numbered_list_item\":\n      if (block.content) {\n        extractedText.push(`1. ${block.content}`);\n      }\n      break;\n\n    case \"child_page\":\n      if (block.content) {\n        extractedText.push(`\\n# ${block.content}\\n`);\n      }\n      break;\n      \n    case \"heading_1\":\n      if (block.content) {\n        extractedText.push(`\\n# ${block.content}\\n`);\n      }\n      break;\n\n    case \"heading_2\":\n      if (block.content) {\n        extractedText.push(`\\n## ${block.content}\\n`);\n      }\n      break;\n\n    case \"heading_3\":\n      if (block.content) {\n        extractedText.push(`\\n### ${block.content}\\n`);\n      }\n      break;\n\n    case \"divider\":\n      extractedText.push(\"\\n---\\n\");\n      break;\n\n    default:\n      // Ignore unsupported block types\n      break;\n  }\n}\n\nreturn [\n  {\n    json: {\n      text: extractedText.join(\"\\n\").trim()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        -352
+      ],
+      "id": "7379e248-154b-43a4-862d-e8696c59ba3f",
+      "name": "Extract Clean Content"
+    },
+    {
+      "parameters": {
+        "jsCode": "const chunkSize = 800;\nconst overlap = 150;\nconst text = $json.text;\n\nlet chunks = [];\nlet start = 0;\n\nwhile (start < text.length) {\n  chunks.push(text.slice(start, start + chunkSize));\n  start += chunkSize - overlap;\n}\n\nreturn chunks.map((chunk, i) => ({\n  json: {\n    chunk_text: chunk,\n    chunk_id: `kb_${Date.now()}_${i}`\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        -352
+      ],
+      "id": "1b345ac7-92fc-475f-af8f-d840fc42ca0e",
+      "name": "Chunking"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=Apppi-Key",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ \n  JSON.stringify({\n    content: {\n      parts: [\n        { text: $json.chunk_text }\n      ]\n    }\n  }) \n}}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        -352
+      ],
+      "id": "191e6536-1704-486e-b61a-7158ceb28707",
+      "name": "Text Embedding",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://leadqualificationdatabase-mgize3s.svc.aped-4627-b74a.pinecone.io/vectors/upsert",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Api-Key",
+              "value": "Api-key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        -144
+      ],
+      "id": "1d574aea-853a-419c-9ae2-4c2536c26b41",
+      "name": "Pinecone Upserting"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  json: {\n    vectors: [\n      {\n        id: $json.chunk_id,\n        values: $json.embedding.values,\n        metadata: {\n          doc_id: \"sales_kb\",\n          chunk_id: $json.chunk_id,\n          source: \"notion\",\n          type: \"knowledge_base\",\n          category: \"sales\",\n          created_at: new Date().toISOString(),\n          is_active: true\n        }\n      }\n    ]\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "9d4029b5-3edd-4a6c-b1c3-ef2fac94b8d3",
+      "name": "Prepare Metadata"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items from both nodes\nconst chunks = $items(\"Chunking\");\nconst embeddings = $items(\"Text Embedding\");\n\n// Safety check\nif (chunks.length !== embeddings.length) {\n  throw new Error(\n    `Mismatch: ${chunks.length} chunks vs ${embeddings.length} embeddings`\n  );\n}\n\n// Merge by index\nconst merged = chunks.map((chunkItem, index) => {\n  const embeddingItem = embeddings[index];\n\n  return {\n    json: {\n      chunk_id: chunkItem.json.chunk_id,\n      chunk_text: chunkItem.json.chunk_text,\n      embedding: embeddingItem.json.embedding,\n    }\n  };\n});\n\nreturn merged;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -144
+      ],
+      "id": "65fb8510-9b8d-45e2-80a1-0e655c2d7fc9",
+      "name": "Merging"
+    },
+    {
+      "parameters": {
+        "content": "## Data Ingestion",
+        "height": 480,
+        "width": 1376
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "5e3b4663-c1c4-445f-8bcc-6f829935b62e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -400,
+        176
+      ],
+      "id": "1041a51b-1c8b-4611-9fb9-b1bd9a800938",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appt5LwKUxqWPpaHu",
+          "mode": "list",
+          "cachedResultName": "LeadsQualification CRM",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbllGfHnK0HZvbzqe",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu/tbllGfHnK0HZvbzqe"
+        },
+        "filterByFormula": "NOT({Processed})",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        176
+      ],
+      "id": "09f4c611-6822-49c2-a10b-0b4fb43cbf89",
+      "name": "Search records"
+    },
+    {
+      "parameters": {
+        "url": "https://api.peopledatalabs.com/v5/company/enrich",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.Email }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.Company }}"
+            },
+            {
+              "name": "website",
+              "value": "={{ $json.Website }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "Api-Key"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        176
+      ],
+      "id": "28b51dd9-f211-45bd-9902-45379ce36f48",
+      "name": "PDL Enrichment",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        16,
+        176
+      ],
+      "id": "c5f812e7-8f94-4ac3-bc39-c41d52dfdc73",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nconst airtable = $node[\"Limit\"].json;\n\n// Helper: include line only if value exists\nconst line = (label, value) => {\n  if (!value || value === \"\" || value === \"Unknown\") return null;\n  return `${label}: ${value}`;\n};\n\n// Helper: join non-empty lines\nconst section = (lines) => {\n  return lines.filter(Boolean).join(\"\\n\");\n};\n\n// Airtable fields (always expected)\nconst company = airtable.Company;\nconst role = airtable.Role;\nconst message = airtable.Message;\n\n// Enrichment fields (optional)\nconst industry = airtable.Industry;\nconst size = lead.size;\nconst location = lead.location;\nconst website = lead.website;\n\n// ---- Build sections ----\n\n// Company block\nconst companySection = section([\n  line(\"Company\", company),\n  line(\"Industry\", industry),\n  line(\"Company Size\", size),\n  line(\"Location\", location),\n  line(\"Website\", website)\n]);\n\n// Contact block\nconst contactSection = section([\n  line(\"Contact Role\", role)\n]);\n\n// Message block (always include if exists)\nconst messageSection = message\n  ? `Lead Message:\\n${message}`\n  : null;\n\n// ---- Combine final context ----\n\nconst leadContext = [\n  \"LEAD CONTEXT\",\n  \"\",\n  companySection,\n  \"\",\n  contactSection,\n  \"\",\n  messageSection\n]\n  .filter(Boolean)\n  .join(\"\\n\")\n  .trim();\n\nreturn [\n  {\n    json: {\n      lead_context: leadContext,\n      raw_message: message || \"\",\n      company: company || null,\n      industry: industry || null,\n      has_enrichment: Boolean(size || location)\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        176
+      ],
+      "id": "f8ecf19d-1eee-4de5-900b-38d343205c47",
+      "name": "Context Format"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=AIzaSyCGiUxLkr5ykICmAUB3cwNnL2HIRBYL6qk",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ \n  JSON.stringify({\n    content: {\n      parts: [\n        { text: $json.lead_context }\n      ]\n    }\n  }) \n}}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        432
+      ],
+      "id": "f37aa16a-bb8f-4edc-8868-dc0001a23b93",
+      "name": "Context Embedding",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://leadqualificationdatabase-mgize3s.svc.aped-4627-b74a.pinecone.io/query",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Api-Key",
+              "value": "Api-Key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"vector\": {{ JSON.stringify($node[\"Context Embedding\"].json.embedding.values) }},\n  \"topK\": 7,\n  \"includeMetadata\": true\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -192,
+        432
+      ],
+      "id": "f76c44d4-bb14-4d13-933c-68fcb2d818ac",
+      "name": "Pinecone Query"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        224,
+        432
+      ],
+      "id": "42758734-e401-4584-b930-29a9388002d0",
+      "name": "Message a model"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d2c45d57-8e68-4382-bd4e-cd70b3cab22c",
+              "leftValue": "={{ $json.fields.QualificationTier }}",
+              "rightValue": "High Potential",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        864
+      ],
+      "id": "fb7da7be-f889-46aa-b38b-2bbdcf1bcbea",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Lead Processing & Qualification",
+        "height": 944,
+        "width": 1120,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "71f502d8-1f62-4762-864d-a135a020915a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get raw text from OpenAI \"Message a model\" node output\nconst rawText =\n  $json.content?.[0]?.text || \"\";\n\n// 2. Remove ```json ``` code fences and trim\nconst cleaned = rawText\n  .replace(/```json/gi, \"\")\n  .replace(/```/g, \"\")\n  .trim();\n\n// 3. Parse JSON safely\nlet parsed;\ntry {\n  parsed = JSON.parse(cleaned);\n} catch (error) {\n  parsed = {\n    score: 0,\n    tier: \"Unqualified\",\n    reason: \"Failed to parse model output\"\n  };\n}\n\n// 4. Normalize values (extra safety)\nconst score =\n  typeof parsed.score === \"number\" ? parsed.score : 0;\n\nconst tier =\n  typeof parsed.tier === \"string\" ? parsed.tier : \"Unqualified\";\n\nconst reason =\n  typeof parsed.reason === \"string\"\n    ? parsed.reason\n    : \"No reason provided\";\n\n// 5. Return clean fields for downstream nodes\nreturn [\n  {\n    json: {\n      QualificationScore: score,\n      QualificationTier: tier,\n      QualificationReason: reason,\n      RawModelOutput: rawText\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        704
+      ],
+      "id": "c33bed73-c3e2-40f7-bf06-1e3d894ec9d4",
+      "name": "Formatting"
+    },
+    {
+      "parameters": {
+        "jsCode": "const leadContext = $node[\"Context Format\"].json.lead_context;\nconst matches = $node[\"Pinecone Query\"].json.matches || [];\n\n// Extract knowledge snippets\nconst knowledge = matches\n  .slice(0, 7)\n  .map((m, i) => `KNOWLEDGE ${i + 1}:\\n${m.metadata.text}`)\n  .join(\"\\n\\n\");\n\nconst prompt = `\nYou are a B2B sales qualification assistant.\n\nYour task:\n- Evaluate the lead using the provided knowledge.\n- Assign a score from 0–100.\n- Assign a tier: Unqualified, Nurture, Qualified, High Potential.\n- Give a short justification.\n\nScoring rubric:\n- 75–100 → High Potential\n- 50–74 → Qualified\n- 25–49 → Nurture\n- 0–24 → Unqualified\n\n===== LEAD =====\n${leadContext}\n\n===== KNOWLEDGE =====\n${knowledge}\n\nRespond in strict JSON:\n{\n  \"score\": number,\n  \"tier\": string,\n  \"reason\": string\n}\n`.trim();\n\nreturn [{ json: { prompt } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        432
+      ],
+      "id": "69755951-a9c9-4408-af3c-77b002982515",
+      "name": "Creating Prompt"
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "email": "={{ $('Limit').item.json.Email }}",
+        "additionalFields": {
+          "annualRevenue": "={{ $('Limit').item.json.AnnualRevenue }}",
+          "companyName": "={{ $('Limit').item.json.Company }}",
+          "firstName": "={{ $('Limit').item.json.Name }}",
+          "industry": "={{ $('Limit').item.json.Industry }}",
+          "websiteUrl": "={{ $('Limit').item.json.Website }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        416
+      ],
+      "id": "96feb610-125c-42cd-bf97-5b5be942c8db",
+      "name": "Create or update a contact"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Lead Message: {{ $('Limit').item.json.Message }}\nLead Status: {{ $('Switch').item.json.QualificationTier }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI outreach email agent responsible for generating personalized outreach emails based on incoming lead information. Your goal is to assess the Lead Message and current Lead Status, then produce a clear, relevant, and appropriately toned outreach email that aligns with sales best practices.\n\n---\n\n## Context\n- Each lead provides:\n  - A Lead Message describing their needs, goals, or what they are looking for.\n  - A LEad Status that indicates their readiness and fit.\n- Lead statuses include:\n  - High Potential\n  - Qualified\n  - Nurture\n  - Unqualified\n- The outreach email must adapt tone, depth, and call-to-action based on the lead status.\n- Emails should feel human, professional, and tailored to the specific lead.\n\n---\n\n## Instructions\n1. Read and understand the lead message to identify:\n   - The core need or problem.\n   - The desired outcome or solution.\n2. Identify the lead status and adjust the outreach strategy accordingly.\n3. Generate a single outreach email that includes:\n   - A personalized opening referencing the lead’s message.\n   - A value-focused response aligned with their needs.\n   - An appropriate call-to-action based on lead status.\n4. Keep the email concise, clear, and sales-appropriate.\n5. Do not mention internal lead scoring or status labels in the email.\n\n---\n\n## Tools\n- Lead Message Input\n- Lead Status Field\n\n---\n\n## Examples\n- Input:\n  - Lead Message: \"We’re looking for a tool to automate follow-ups for our sales team.\"\n  - Lead Status: High Potential\n- Output:\n  - A confident, direct outreach email proposing a conversation or demo focused on automation benefits.\n\n- Input:\n  - Lead Message: \"Just exploring options for the future.\"\n  - Lead Status: Nurture\n- Output:\n  - A soft, educational outreach email offering helpful resources without a strong sales push.\n\n---\n\n## SOP (Standard Operating Procedure)\n1. Review the lead message and extract key needs or intent.\n2. Map the lead status to the outreach approach:\n   - High Potential: Direct, confident, action-oriented.\n   - Qualified: Consultative, solution-focused, inviting discussion.\n   - Nurture: Educational, supportive, low-pressure.\n   - Unqualified: Polite, brief, and non-pushy.\n3. Draft the email:\n   - Subject line aligned with intent.\n   - Personalized opening sentence.\n   - Body addressing the lead’s needs.\n   - Call-to-action suited to the lead status.\n4. Ensure clarity, professionalism, and relevance.\n5. Output only the final email content.\n\n---\n\n## Final Notes\n- Emails should sound natural and human, not automated.\n- Avoid jargon unless clearly relevant to the lead’s message.\n- Keep length proportional to lead interest level.\n- Always prioritize value over selling.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        416
+      ],
+      "id": "5fdfb2c6-2a3b-4627-805b-32973d7898de",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.QualificationScore }}",
+                    "rightValue": 75,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "04c32482-6c45-477d-8862-db5ac5080e0c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "High Potential"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c51cb029-71a2-48ce-9715-68f350bbb0ed",
+                    "leftValue": "={{ $json.QualificationScore }}",
+                    "rightValue": 50,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Qualified"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5141686a-72b4-4fd0-bad7-5d41ea6d46bf",
+                    "leftValue": "={{ $json.QualificationScore }}",
+                    "rightValue": 25,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Nurture"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "68a70383-7168-4cf7-a59e-cae64836d3bc",
+                    "leftValue": "={{ $json.QualificationScore }}",
+                    "rightValue": 24,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Notqualififed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -208,
+        672
+      ],
+      "id": "d5caada9-b03c-4829-9d6e-0eabaffdd74e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appt5LwKUxqWPpaHu",
+          "mode": "list",
+          "cachedResultName": "LeadsQualification CRM",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbllGfHnK0HZvbzqe",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/appt5LwKUxqWPpaHu/tbllGfHnK0HZvbzqe"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $node[\"Limit\"].json.id }}\n",
+            "Enrichment": "Yes",
+            "QualificationScore": "={{ $json.QualificationScore }}",
+            "QualificationTier": "={{ $json.QualificationTier }}",
+            "LastAction": "={{ new Date().toISOString() }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "LeadID",
+              "displayName": "LeadID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "CEO",
+                  "value": "CEO"
+                },
+                {
+                  "name": "Founder",
+                  "value": "Founder"
+                },
+                {
+                  "name": "CTO",
+                  "value": "CTO"
+                },
+                {
+                  "name": "Marketing",
+                  "value": "Marketing"
+                },
+                {
+                  "name": "Sales",
+                  "value": "Sales"
+                },
+                {
+                  "name": "Product",
+                  "value": "Product"
+                },
+                {
+                  "name": "Operations",
+                  "value": "Operations"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AnnualRevenue",
+              "displayName": "AnnualRevenue",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Technology",
+                  "value": "Technology"
+                },
+                {
+                  "name": "Finance",
+                  "value": "Finance"
+                },
+                {
+                  "name": "Healthcare",
+                  "value": "Healthcare"
+                },
+                {
+                  "name": "Education",
+                  "value": "Education"
+                },
+                {
+                  "name": "Retail",
+                  "value": "Retail"
+                },
+                {
+                  "name": "Manufacturing",
+                  "value": "Manufacturing"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Form",
+                  "value": "Form"
+                },
+                {
+                  "name": "Ads",
+                  "value": "Ads"
+                },
+                {
+                  "name": "Referral",
+                  "value": "Referral"
+                },
+                {
+                  "name": "Other",
+                  "value": "Other"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Enrichment",
+              "displayName": "Enrichment",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "QualificationScore",
+              "displayName": "QualificationScore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "QualificationTier",
+              "displayName": "QualificationTier",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Unqualified",
+                  "value": "Unqualified"
+                },
+                {
+                  "name": "Nurture",
+                  "value": "Nurture"
+                },
+                {
+                  "name": "Qualified",
+                  "value": "Qualified"
+                },
+                {
+                  "name": "High Potential",
+                  "value": "High Potential"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LastAction",
+              "displayName": "LastAction",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tags",
+              "displayName": "Tags",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "options": [
+                {
+                  "name": "Urgent",
+                  "value": "Urgent"
+                },
+                {
+                  "name": "Follow Up",
+                  "value": "Follow Up"
+                },
+                {
+                  "name": "Cold",
+                  "value": "Cold"
+                },
+                {
+                  "name": "Warm",
+                  "value": "Warm"
+                },
+                {
+                  "name": "Hot",
+                  "value": "Hot"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Processed",
+              "displayName": "Processed",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AssignedTo",
+              "displayName": "AssignedTo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        704
+      ],
+      "id": "cca4b2c2-a2f9-4eab-baad-ead46d78e85c",
+      "name": "Update Lead Details"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09F382QNJG",
+          "mode": "list",
+          "cachedResultName": "lead-management-team"
+        },
+        "text": "=🔥 *High Potential Lead Detected*\n\n*Company:* {{ $('Limit').item.json.Company }}\n*Score:* {{ $('Update Lead Details').item.json.fields.QualificationScore }}/100\n*Tier:* {{ $('Update Lead Details').item.json.fields.QualificationTier }}\n*Reason:*\n{{ $('Switch').item.json.QualificationReason }}\n\n*Next Action:* Review and contact within 24h\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        736
+      ],
+      "id": "dd8c02a6-9866-4750-a5f8-94a431478ae8",
+      "name": "Send a message",
+      "webhookId": "d3f3436a-9843-45a4-abb4-d319f8fe70f9"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-20250514",
+          "cachedResultName": "Claude 4 Sonnet"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        704
+      ],
+      "id": "458b5920-0c96-47b9-bac8-38796c00e23f",
+      "name": "Anthropic Chat Model"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Limit').item.json.Email }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        704
+      ],
+      "id": "1f5c8d3c-56f3-4dc0-97ec-e66bbf78dd18",
+      "name": "Send a message in Gmail",
+      "webhookId": "b06b7954-e7c3-4fa0-a9d4-29624d8f8742"
+    },
+    {
+      "parameters": {
+        "content": "## CRM Contact Creation & Lead Outreach",
+        "height": 944,
+        "width": 688,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        672,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "18e421d7-dfa4-47c5-8c15-cc68d47fd6bd",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {
+    "Get Pages": [
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "name": "📘 ",
+          "url": "https://www.notion.so/7-Budget-Guidelines-2ca281bc1d8b802983d8ded243d453f2"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "name": "Sales Knowledge Base (AI Lead Qualification Project)",
+          "url": "https://www.notion.so/Sales-Knowledge-Base-AI-Lead-Qualification-Project-2ca281bc1d8b804dab5fdbc94d5aa213"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "name": "📘 ",
+          "url": "https://www.notion.so/6-Lead-Qualification-Rules-For-RAG-2ca281bc1d8b8021aed0e67bbaa62e29"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "name": "📘 ",
+          "url": "https://www.notion.so/5-Service-Descriptions-For-Your-RAG-Knowledge-Base-2ca281bc1d8b80d4904cf76090e3a3ed"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "name": "📘 ",
+          "url": "https://www.notion.so/4-FAQ-Lead-Qualification-Agent-2ca281bc1d8b8006b749fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "name": "📘 ",
+          "url": "https://www.notion.so/3-Pricing-Documentation-2ca281bc1d8b80798d45e1ce900ba38d"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "name": "📘 ",
+          "url": "https://www.notion.so/1-Ideal-Customer-Profile-ICP-2ca281bc1d8b8034a5cee81157c4c980"
+        }
+      },
+      {
+        "json": {
+          "id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "name": "📘 ",
+          "url": "https://www.notion.so/2-Product-Pages-AI-Lead-Qualification-Agent-2ca281bc1d8b80f98348fbf0bb6f3569"
+        }
+      }
+    ],
+    "Get Content Inside Pages": [
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "id": "2ca281bc-1d8b-80ea-ad22-f6be4ef16cb9",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "content": "0–100 → Not qualified"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "id": "2ca281bc-1d8b-8029-be0f-f34ccfac660f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "content": "100–250 → Low budget"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "id": "2ca281bc-1d8b-80e9-90c3-c8cc60a192a4",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "content": "250–500 → Suitable"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "id": "2ca281bc-1d8b-8058-af24-f11ac345e811",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "content": "500–1500 → Ideal"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "id": "2ca281bc-1d8b-8019-b3df-e644d60f8634",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "content": "1500+ → High-value lead"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 1. Ideal Customer Profile (ICP)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 2. Product Pages — AI Lead Qualification Agent"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 3. Pricing Documentation"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 4. FAQ — Lead Qualification Agent"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 5. Service Descriptions (For Your RAG Knowledge Base)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 6. Lead Qualification Rules (For RAG)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "id": "2ca281bc-1d8b-8029-83d8-ded243d453f2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "child_page",
+          "root_id": "2ca281bc-1d8b-804d-ab5f-dbc94d5aa213",
+          "content": "📘 7. Budget Guidelines"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8047-834d-e3b3afc46586",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Match Questions"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-802d-a1b9-cb7d1127715a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Does the lead match the ICP industry?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8006-8179-e009fc66bf3d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Does the lead match the budget expectations?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-80cc-b51d-d6bb6a62575f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Does the lead need the services now?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-801e-a3ee-cfdd1f4ce30c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Do they express urgency?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8069-badd-f89eca4d1533",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Do they already use Airtable, Sheets, or CRM?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8074-9816-edcd8727c9af",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Disqualifiers"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8079-804c-dc7386e333f4",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Budget lower than $100"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8043-8060-fecbfbe87005",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "No need for automation"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-8031-8c9f-ce3974e66e0f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Not tech friendly"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-800e-8565-d6e2d260ed1e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Unverified or fake email/phone"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "id": "2ca281bc-1d8b-80b0-b702-e3095e48b82c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8021-aed0-e67bbaa62e29",
+          "content": "Duplicate record"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8048-9c4a-fca697acb89d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Service #1: AI Lead Qualification Agent Setup"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-802f-88d4-e7b5bc85b112",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "End-to-end automation"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-804d-be18-cd4ba8e29631",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Pinecone index creation"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80ef-a7d5-c4d7669efaac",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Knowledge base ingestion"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80b7-9716-e7783b177fc8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Scoring logic"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8068-892d-fcc1788fb257",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Notifications & CRM syncing"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8059-abde-ec12053dd5d7",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Service #2: CRM Automations & Integrations"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80cd-ad9e-dc3f15fa084c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Airtable CRM"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80f3-af7a-e684cc571bb1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Google Sheets CRM"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80da-a0e5-f8ad9571fe4a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "HubSpot / Pipedrive / GoHighLevel"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-806e-bdcf-d82f0f7c7149",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Form → CRM pipelines"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80af-9015-f2e3414ab9f2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Service #3: RAG Dataset Setup"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80a3-8830-c4b26be93996",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Create structured data blocks:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8094-a182-d8096121f22f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Chunking + embedding model setup"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8019-bf58-e10cdb57ad46",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Upload into Pinecone"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8093-8ff3-f8180eb465d7",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Service #4: Continuous Lead Monitoring"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80aa-a670-db600b35cb11",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Daily sync operations"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-8006-900a-ed7485cb3944",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Performance insights"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-80fb-a0e3-cb6c79cd63f9",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Data cleaning"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "id": "2ca281bc-1d8b-803c-b9d5-c12e2be9b617",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-80d4-904c-f76090e3a3ed",
+          "content": "Score optimization"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8022-bad1-db01add0a977",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "1. How does the AI qualify a lead?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-809b-b4dc-ca9e45312c79",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "It uses your pricing, ICP, FAQs, and service information to match the lead’s data and score them on fit, budget, and intent."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80c7-b917-dcbc934f102d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8046-a466-c252dc9a8e57",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "2. Can it work with any CRM (HubSpot, Pipedrive, GoHighLevel, Airtable)?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80d5-a15e-ea0d09926f4d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Yes. n8n allows direct integration with almost any CRM."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8078-be09-fa7f0f6b8a4f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80d7-96af-f9599e73ab3e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "3. What data do I need to provide?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80d0-a0a3-c92c6eb033ca",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Your ICP"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-804e-b606-d162022f38e5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Pricing details"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8044-afe9-dfa8f24c9621",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Services/products you offer"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-807f-9448-c454d575d116",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Lead fields to extract"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8051-9815-fd0b650cc8d6",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "CRM structure"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80eb-ab11-fa3dd20e12d8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80bd-9ff5-c7edf975713f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "4. Is the system fully automated?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-805b-8728-c3c660084c52",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Yes. Once a lead enters Airtable/Google Sheets/Form → It is processed → Scored → Synced → Notified."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-803f-ab7d-cdc87be0fc58",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8072-bc7d-fc3e9a5002d5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "5. Can I customize the qualification rules?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8036-9dbe-edf9ed2563f3",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Yes. You can adjust:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8021-be53-fd8a74f49094",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "ICP match rules"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80f4-b036-e14cb4a1b390",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Budget thresholds"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8050-9d30-d034694299fa",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Disqualifiers"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-807a-8c7e-e9634cb604e5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Scoring weights"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8010-b957-c8c98d58887e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8079-9645-f7c4ca101519",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "6. How accurate is the AI?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8006-a73d-edcd98530794",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "With a proper RAG dataset, accuracy ranges from 87%–96% depending on the clarity of your ICP and pricing docs."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8062-965d-e4176d165da1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80af-8687-cc1c79066ab2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "7. Do you store my customer data?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8046-a218-e0e0bff4a608",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "No. All processing happens in your n8n server and your Pinecone environment."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-806f-8cf7-e3c31f3b640b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8009-8ac8-f65966ea51dd",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "8. Can it detect spam or fake leads?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80bd-ba5f-c5cb7e3aad1c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Yes. Built-in spam/fake number/email detection is included."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80f7-811e-dac953d0e2ae",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-803a-875a-dd71fc8f9e5b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "9. Can it summarize leads?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80f2-bc21-d16412f0f694",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Yes. It generates an easy-to-read summary for your sales team."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-804e-b960-fb6feecbfb71",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "divider",
+          "divider": {},
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-800e-b18b-d732453cd993",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "10. How long does setup take?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-809d-ac29-ca33e26ec0cb",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Starter: 1–2 days"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-8089-be31-ee7b15c1b08c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Professional: 3–5 days"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "id": "2ca281bc-1d8b-80ff-a21e-cd7cae036d80",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8006-b749-fad0e3b1d722",
+          "content": "Enterprise: 1–2 weeks"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8001-9403-ec323745f4d1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Pricing Tiers"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8004-a706-d713d38d0ac1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Starter ($249 one-time)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80cb-bcc6-f4fb1e236743",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Lead scoring workflow"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-806e-8b2f-c91b1511d1ae",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Basic Airtable → n8n → Spreadsheet pipeline"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8062-bc74-d89ba1c1afeb",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "1 CRM integration"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80d9-a52e-d3f932d89889",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "ICP + FAQ dataset setup"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80c4-a9f4-ddccc5b38e5d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "No Pinecone (simplified RAG)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8073-aa38-cb4882136452",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Professional ($499 one-time)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8059-a013-ccea314f1d38",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Full n8n pipeline"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8068-a30f-ee8996177bfa",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Pinecone vector DB setup"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-808b-908d-d65429feb6fa",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Gemini embedding model"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80fa-9bd4-d6ac5faa5de2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Scoring + RAG context"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8049-b58a-e3800a88ff54",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Automatic CRM syncing"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8007-b530-d46b2dca7d69",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Slack/Telegram alerts"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8027-9572-c005485a0b81",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Enterprise ($1200+)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80a4-b230-dc2ccd27c539",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Custom scoring models"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80b6-b5d0-d714da8c540a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Multi-brand CRM syncing"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-809d-876d-e54d165e2d2b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Multi-language support"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-808a-8c00-ff40fc83e863",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Weekly analytics dashboard"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8015-9723-e620c94402a3",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Priority support"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8095-af29-c4d302f2f131",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Ongoing maintenance"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80ee-9180-d156f6afa307",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Additional Add-Ons"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8048-86b9-f85fdb5941a0",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Additional CRM integration: $99"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-80ec-8dd3-c30a766ae31d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Custom RAG dataset: $149"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8020-b7f0-ef204ba05182",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Custom scoring rules: $79"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "id": "2ca281bc-1d8b-8012-b80f-db50909b3eb0",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8079-8d45-e1ce900ba38d",
+          "content": "Monthly management: $99/month"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-802d-9282-ce55d32eef44",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "ICP Name: Online Service Businesses (Automations, Agencies, SaaS, Coaches)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80bc-91fd-db3cdd373978",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Industry"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8050-a9cb-ed72fddc7e20",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "AI Automation Agencies"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8046-96e3-eed415306f7a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Digital Marketing Agencies"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80f0-8bdf-d68f3139f0e0",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Coaches/Consultants"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8067-9fd5-cf6ca8788d4c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "E-commerce sellers"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8044-9d3c-f983f511e77d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "SaaS startups"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-809f-a9a9-ef2faa1035cb",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Professional service providers (lawyers, accountants, real estate, clinics)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8014-a40c-f81a1a9c17c2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Business Size"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80ec-8dce-e93869b0769f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Solo founders → 20 employees"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8060-acd6-c8281b440e9c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Revenue: $5k → $1M/year"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80fe-a7e0-eaba4aa46418",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Tech-friendly, uses cloud tools (Airtable, Google Sheets)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8058-9ef7-e806579e1ec3",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Key Challenges"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8089-813c-e870e732454c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Too many unfiltered leads"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80df-890f-e0456b5fe84e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Wasting time on low-quality prospects"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-804a-9275-c50fd6b42580",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Manual qualification takes too much time"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8029-bdb4-db1babe95ba5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "No structured CRM"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-8045-a0af-ff9cf6abe48c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "No automation or AI to score leads"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-801c-9ef6-f460209529b3",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Missed follow-ups"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-809a-8650-c1e3bc44edd8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Difficulty tracking lead source + history"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80ca-9cd2-d077f8a58c77",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Buying Triggers"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-804c-93a4-c0351e90899b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Launching new product/service"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80c7-b084-e3fe9e3a0a4e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Scaling outreach"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80bd-8d87-eef11d03a381",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Heavy inbound form submissions"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80f1-b016-ddda3950a49f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Using Airtable/Sheets to manage leads"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-807b-92ad-d3c7f6fdd202",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Already using n8n, Make.com or Zapier"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-80bd-80ba-f89e399a4431",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "Budget Range"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "id": "2ca281bc-1d8b-807a-bf5a-ec6c15533830",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "2ca281bc-1d8b-8034-a5ce-e81157c4c980",
+          "content": "$200 – $3,000 depending on the automation complexity"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80fc-b22f-e30b6c84df2f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Product Name: SmartAI Lead Qualification Agent"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-8019-bcd8-cfc77e2996a8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Description:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80e9-b84e-e662bf90322e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "A fully automated RAG-powered lead qualification system built using n8n, Pinecone, Gemini/OpenAI, and your CRM."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-805d-8c27-e5eda44be6de",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Key Features"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80fe-ba55-f0a56d2b3499",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Automatic Lead Enrichment"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80dc-b5fe-ed60385c74e2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "AI RAG-Based Lead Scoring"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-800e-93c0-fecc0eaec6e4",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Lead Categorization"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-8009-82f9-cd891cb7eb76",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Automatic CRM Updates"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-8069-a576-c1f82d62dab7",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Smart Notifications"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80eb-b2b8-d212965a153f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "numbered_list_item",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": "Analytics"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "id": "2ca281bc-1d8b-80c7-b65e-cc382a000994",
+          "parent": {
+            "type": "page_id",
+            "page_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "2a2d872b-594c-8101-9672-00022168829a"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "2ca281bc-1d8b-80f9-8348-fbf0bb6f3569",
+          "content": ""
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Typeform Trigger": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pages": {
+      "main": [
+        [
+          {
+            "node": "Get Content Inside Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Content Inside Pages": {
+      "main": [
+        [
+          {
+            "node": "Extract Clean Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Clean Content": {
+      "main": [
+        [
+          {
+            "node": "Chunking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunking": {
+      "main": [
+        [
+          {
+            "node": "Text Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Embedding": {
+      "main": [
+        [
+          {
+            "node": "Merging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Metadata": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Upserting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merging": {
+      "main": [
+        [
+          {
+            "node": "Prepare Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "PDL Enrichment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDL Enrichment": {
+      "main": [
+        [
+          {
+            "node": "Context Format",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Context Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context Format": {
+      "main": [
+        [
+          {
+            "node": "Context Embedding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context Embedding": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Query": {
+      "main": [
+        [
+          {
+            "node": "Creating Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Formatting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Formatting": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creating Prompt": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a contact": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Lead Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Lead Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Lead Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Lead Details": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create or update a contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1b2593ec-2799-42f1-b8db-a4d2e23ea3ed",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "83cf903f0fb07939d7b28f2155fe2feda785416b374bc4f4f8641e001e971c03"
+  },
+  "id": "hzLBiYFMIOQ2UGny",
+  "tags": []
+}
